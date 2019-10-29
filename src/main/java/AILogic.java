@@ -34,17 +34,26 @@ class AILogic
     //method called in GUI to find the AI's move
     static TTTBoard.Coordinate findMove(TTTBoard gameBoard)
     {
-        ArrayList<TTTBoard.Coordinate> moveOptions =  findMoveHelper(gameBoard, 0);
+        ArrayList<TTTBoard.Coordinate> moveOptions =  findMoveHelperMax(gameBoard, 0);
         return moveOptions.get(random.nextInt(moveOptions.size())); //return a random Coordinate that the AI thinks is okay to make
     }
 
-    //method to find a list of moves the AI may make
-    private static ArrayList<TTTBoard.Coordinate> findMoveHelper(TTTBoard gameBoard, int depthTraversed)
+    //method to find a list of moves the AI may make, this is the max function of minimax
+    private static ArrayList<TTTBoard.Coordinate> findMoveHelperMax(TTTBoard gameBoard, int depthTraversed)
     {
-       // if(depthTraversed > maxDepth)
-            //gonna return TODO
+       if(depthTraversed > maxDepth) //if we're deeper than the depth we want to traverse down, any open moves are fair game
+           return gameBoard.getOpenSpaces();
 
-        //TODO
+       //TODO holder
+        return null;
+    }
+
+    private static ArrayList<TTTBoard.Coordinate> findMoveHelperMin(TTTBoard gameBoard, int depthTraversed)
+    {
+        if(depthTraversed > maxDepth) //we've gone beyond the limits we're allowed to explore
+            return gameBoard.getOpenSpaces(); //any legal move is therefore equal in the eyes of this AI
+
+        //TODO holder
         return null;
     }
 }
