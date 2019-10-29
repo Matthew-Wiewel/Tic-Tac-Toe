@@ -6,43 +6,49 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TestAILogic
 {
     private TTTBoard board;
+    static private AILogic ai;
 
     @BeforeAll
     static void init()
     {
+
         AILogic.setSkillLevels();
+        ai = new AILogic();
     }
 
     @BeforeEach
     void initBoard()
     {
+
         board = new TTTBoard();
     }
 
     @Test
     void testSetSkillLevel()
     {
-        AILogic.setSkillLevel(AILogic.skillLevelEasy);
-        assertEquals(1, AILogic.getSkillLevel(), "Easy is not 1");
+        ai.setSkillLevel(AILogic.skillLevelEasy);
+        assertEquals(1, ai.getSkillLevel(), "Easy is not 1");
 
-        AILogic.setSkillLevel(AILogic.skillLevelMedium);
-        assertEquals(G.N, AILogic.getSkillLevel(), "Medium is not G.N=" + G.N);
+        ai.setSkillLevel(AILogic.skillLevelMedium);
+        assertEquals(G.N, ai.getSkillLevel(), "Medium is not G.N=" + G.N);
 
-        AILogic.setSkillLevel(AILogic.skillLevelHard);
-        assertEquals(2*G.N, AILogic.getSkillLevel(), "Hard is not 2*G.N=" + 2*G.N);
+        ai.setSkillLevel(AILogic.skillLevelHard);
+        assertEquals(2*G.N, ai.getSkillLevel(), "Hard is not 2*G.N=" + 2*G.N);
 
-        AILogic.setSkillLevel(AILogic.skillLevelExpert);
-        assertEquals(G.N*G.N-1, AILogic.getSkillLevel(), "Expert is not G.N*G.N-1=" + G.N*G.N*-1);
+        ai.setSkillLevel(AILogic.skillLevelExpert);
+        assertEquals(G.N*G.N-1, ai.getSkillLevel(), "Expert is not G.N*G.N-1=" + G.N*G.N*-1);
     }
 
     @Test
     void testSetPlayer()
     {
-        AILogic.setPlayer(G.X);
-        assertEquals(G.X, AILogic.getPlayer(), "Setting AI to player X does not set AI to player X");
+        ai.setPlayer(G.X);
+        assertEquals(G.X, ai.getPlayer(), "Setting AI to player X does not set AI to player X");
+        assertEquals(G.O, ai.getOpponent(), "Setting AI to X does not make opponent to O");
 
-        AILogic.setPlayer(G.O);
-        assertEquals(G.O, AILogic.getPlayer(), "Setting AI to player O does not set AI to player O");
+        ai.setPlayer(G.O);
+        assertEquals(G.O, ai.getPlayer(), "Setting AI to player O does not set AI to player O");
+        assertEquals(G.X, ai.getOpponent(), "Setting AI to O does not make opponent X");
     }
 
     /*
