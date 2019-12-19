@@ -16,6 +16,7 @@ public class TicTacToeGame extends Application
     private int numWon;
     private int numDrawn;
     private int numLost;
+    private Difficulty chosenDifficulty;
 
     //Image constants
     final private Image blankImage = new Image("blank.png");
@@ -25,7 +26,7 @@ public class TicTacToeGame extends Application
     final private Image oTransition = new Image("halfO.png");
 
     private Scene homeScene; //scene for selecting difficulty, playing, and seeing history
-    private HBox homeSceneBox;
+    private VBox homeSceneBox;
     private MenuBar topMenu; //used for menu to go across top of the screen
     private Menu options; //menu to hold various options for quitting or clearing history
     private MenuItem freshStart;
@@ -39,10 +40,14 @@ public class TicTacToeGame extends Application
     private MenuItem selectMedium;
     private MenuItem selectHard;
     private MenuItem selectExpert;
+    private HBox bottomOfHomePane; //used to hold the two VBoxes below
     private VBox selectionAndPlayHolder; //used to hold displays of current selections and play button
     private TextField currentBoardSizeDisplay;
     private TextField currentDifficultyDisplay;
     private Button playButton;
+    private VBox infoHolder;
+    private ListView<String> priorGames;
+    private TextField winDrawLossDisplay;
 
     private Scene playScene; //used for playing the game of Tic Tac Toe
     private BorderPane playBox; //used to hold the GUI in this scene
@@ -61,10 +66,8 @@ public class TicTacToeGame extends Application
 
     }
 
-    private void createScenes()
+    private void createHomeScene()
     {
-        //TODO, make home scene
-
         //initialize menu bar for home scene
         topMenu = new MenuBar();
 
@@ -75,22 +78,92 @@ public class TicTacToeGame extends Application
         quit.setOnAction(e->System.exit(0)); //quit buttons exits game
         options.getItems().addAll(freshStart, quit);
 
-        boardSizeOptions = new Menu("Board Size");
+        boardSizeOptions = new Menu("Board Size"); //menu for board sizes
         size3x3 = new MenuItem("Standard (3x3)");
         size4x4 = new MenuItem("Large (4x4)");
         size5x5 = new MenuItem("Huge (5x5)");
         /*TODO, when the play button is picked, that'll compare this to N to see if board needs recreation*/;
-        size3x3.setOnAction(e->boardSize = 3);
-        size4x4.setOnAction(e->boardSize = 4);
-        size5x5.setOnAction(e->boardSize = 5);
+        size3x3.setOnAction(e->{
+            boardSize = 3;
+            currentBoardSizeDisplay.setText("3x3 Board");
+        });
+        size4x4.setOnAction(e->{
+            boardSize = 4;
+            currentBoardSizeDisplay.setText("4x4 Board");
+        });
+        size5x5.setOnAction(e->{
+            boardSize = 5;
+            currentBoardSizeDisplay.setText("5x5 Board");
+        });
         boardSizeOptions.getItems().addAll(size3x3, size4x4, size5x5);
 
-        difficultyOptions = new Menu("Difficulty");
+        difficultyOptions = new Menu("Difficulty"); //menu for difficulty level
+        //TODO, we'll calculate difficulty when play is pressed
         selectEasy = new MenuItem("Easy");
         selectMedium = new MenuItem("Medium");
         selectHard = new MenuItem("Hard");
         selectExpert = new MenuItem("Expert");
+        selectEasy.setOnAction(e->{
+            chosenDifficulty = Difficulty.EASY;
+            currentDifficultyDisplay.setText("Easy");
+        }); //on action, corresponding difficulty is chosen
+        selectMedium.setOnAction(e->{
+            chosenDifficulty = Difficulty.MEDIUM;
+            currentDifficultyDisplay.setText("Medium");
+        });
+        selectHard.setOnAction(e->{
+            chosenDifficulty = Difficulty.HARD;
+            currentDifficultyDisplay.setText("Hard");
+        });
+        selectExpert.setOnAction(e->{
+            chosenDifficulty = Difficulty.EXPERT;
+            currentDifficultyDisplay.setText("Expert");
+        });
+        difficultyOptions.getItems().addAll(selectEasy, selectMedium, selectHard, selectExpert);
 
+        topMenu.getMenus().addAll(options, boardSizeOptions, difficultyOptions);
+
+
+
+        
+        //create left VBox with current settings and play button
+
+        //text fields for displaying size and difficulty, disabled and style to not be greyed out
+        currentDifficultyDisplay = new TextField("Easy");
+        currentBoardSizeDisplay = new TextField("3x3 Board");
+        currentDifficultyDisplay.setDisable(true);
+        currentBoardSizeDisplay.setDisable(true);
+        currentDifficultyDisplay.setStyle("-fx-opacity: 1.0");
+        currentBoardSizeDisplay.setStyle("-fx-opacity: 1.0");
+
+        playButton = new Button("Play A Game!"); //button for playing a game
+        playButton.setOnAction(e->{} /*TODO, start a game*/);
+
+        selectionAndPlayHolder = new VBox(20, currentDifficultyDisplay, currentBoardSizeDisplay, playButton);
+
+        priorGames = new ListView<>(); //create variables to display results of previous games and current stats
+        winDrawLossDisplay = new TextField("          ");
+        infoHolder = new VBox(20, priorGames, winDrawLossDisplay);
+
+        //combine the two VBoxes into an HBox
+        bottomOfHomePane = new HBox(40, selectionAndPlayHolder, infoHolder);
+
+
+
+
+
+
+    }
+
+    private void createPlayScene()
+    {
+
+    }
+
+    private void createScenes()
+    {
+        createHomeScene();
+        createPlayScene();
 
         //TODO, make play scene
         remakeBoard(); //will initially be for the 3x3
@@ -106,6 +179,13 @@ public class TicTacToeGame extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+        //initial values made
+        boardSize = 3;
+        chosenDifficulty = Difficulty.EASY;
+        numDrawn = 0;
+        numLost = 0;
+        numWon = 0;
+
         this.primaryStage = primaryStage; //set equal so we can reference the primary stage outside of start
         createScenes();
         //TODO: add GUI
