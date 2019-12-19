@@ -18,6 +18,7 @@ public class TicTacToeGame extends Application
     private int numLost;
     private Difficulty chosenDifficulty;
     private boolean hasGameInProgress;
+    private AILogic ai;
 
     //Image constants
     final private Image blankImage = new Image("blank.png");
@@ -86,6 +87,9 @@ public class TicTacToeGame extends Application
                 {
                     //TODO if needed: boardImages[i][j] = new ImageView(blankImage);
                     boardImages[i][j].setImage(blankImage);
+                    boardImages[i][j].setOnMouseClicked(e->{
+                        //TODO, make move
+                    });
                 }
             }
         }
@@ -108,7 +112,14 @@ public class TicTacToeGame extends Application
         options = new Menu("File"); //options menu
         freshStart = new MenuItem("Fresh Start");
         quit = new MenuItem("Quit");
-        freshStart.setOnAction(e->{} /*TODO, clear prior results*/);
+        freshStart.setOnAction(e->{
+            //clear everything related to prior games
+            winDrawLossDisplay.setText(emptyTextField);
+            priorGames.getItems().removeAll();
+            numWon = 0;
+            numLost = 0;
+            numDrawn = 0;
+        });
         quit.setOnAction(e->System.exit(0)); //quit buttons exits game
         options.getItems().addAll(freshStart, quit);
 
@@ -116,7 +127,6 @@ public class TicTacToeGame extends Application
         size3x3 = new MenuItem("Standard (3x3)");
         size4x4 = new MenuItem("Large (4x4)");
         size5x5 = new MenuItem("Huge (5x5)");
-        /*TODO, when the play button is picked, that'll compare this to N to see if board needs recreation*/;
         size3x3.setOnAction(e->{
             boardSize = 3;
             currentBoardSizeDisplay.setText("3x3 Board");
@@ -132,7 +142,6 @@ public class TicTacToeGame extends Application
         boardSizeOptions.getItems().addAll(size3x3, size4x4, size5x5);
 
         difficultyOptions = new Menu("Difficulty"); //menu for difficulty level
-        //TODO, we'll calculate difficulty when play is pressed
         selectEasy = new MenuItem("Easy");
         selectMedium = new MenuItem("Medium");
         selectHard = new MenuItem("Hard");
@@ -171,7 +180,12 @@ public class TicTacToeGame extends Application
         currentBoardSizeDisplay.setStyle("-fx-opacity: 1.0");
 
         playButton = new Button("Play A Game!"); //button for playing a game
-        playButton.setOnAction(e->{} /*TODO, start a game*/);
+        playButton.setOnAction(e->{
+            remakeBoard(); //set up board
+            ai.setSkillLevel(chosenDifficulty); //set up difficulty
+            primaryStage.setTitle(playTitle); //and change over to playing scene
+            primaryStage.setScene(playScene);
+        });
 
         selectionAndPlayHolder = new VBox(20, currentDifficultyDisplay, currentBoardSizeDisplay, playButton);
 
@@ -241,9 +255,6 @@ public class TicTacToeGame extends Application
     {
         createHomeScene();
         createPlayScene();
-
-        //TODO, make play scene
-        remakeBoard(); //will initially be for the 3x3
     }
 
     //main function to allow mvn exec:main and mvn compile to launch program with the given plugins
@@ -257,14 +268,16 @@ public class TicTacToeGame extends Application
     public void start(Stage primaryStage) throws Exception
     {
         //initial values made
+        G.N = 2; //initially an invalid size so that the first press of play does make a board and set G.N to 3 as proper
         boardSize = 3;
         chosenDifficulty = Difficulty.EASY;
         numDrawn = 0;
         numLost = 0;
         numWon = 0;
         hasGameInProgress = false;
+        ai = new AILogic();
+        this.primaryStage = primaryStage; //set equal so we can reference the primary stage outside of start4
 
-        this.primaryStage = primaryStage; //set equal so we can reference the primary stage outside of start
         createScenes();
         primaryStage.setTitle(homeTitle);
         primaryStage.setScene(homeScene);
