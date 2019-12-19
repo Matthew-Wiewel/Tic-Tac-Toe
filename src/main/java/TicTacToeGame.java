@@ -65,6 +65,30 @@ public class TicTacToeGame extends Application
     {
         //TODO, make home scene
 
+        //initialize menu bar for home scene
+        topMenu = new MenuBar();
+
+        options = new Menu("File"); //options menu
+        freshStart = new MenuItem("Fresh Start");
+        quit = new MenuItem("Quit");
+        freshStart.setOnAction(e->{} /*TODO, clear prior results*/);
+        quit.setOnAction(e->System.exit(0)); //quit buttons exits game
+        options.getItems().addAll(freshStart, quit);
+
+        boardSizeOptions = new Menu("Board Size");
+        size3x3 = new MenuItem("Standard (3x3)");
+        size4x4 = new MenuItem("Large (4x4)");
+        size5x5 = new MenuItem("Huge (5x5)");
+        /*TODO, when the play button is picked, that'll compare this to N to see if board needs recreation*/;
+        size3x3.setOnAction(e->boardSize = 3);
+        size4x4.setOnAction(e->boardSize = 4);
+        size5x5.setOnAction(e->boardSize = 5);
+        boardSizeOptions.getItems().addAll(size3x3, size4x4, size5x5);
+
+        difficultyOptions = new Menu("Difficulty");
+
+
+
         //TODO, make play scene
         remakeBoard(); //will initially be for the 3x3
     }
@@ -80,6 +104,7 @@ public class TicTacToeGame extends Application
     public void start(Stage primaryStage) throws Exception
     {
         this.primaryStage = primaryStage; //set equal so we can reference the primary stage outside of start
+        createScenes();
         //TODO: add GUI
     }
 
