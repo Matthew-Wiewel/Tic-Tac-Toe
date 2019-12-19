@@ -17,6 +17,7 @@ public class TicTacToeGame extends Application
     private int numDrawn;
     private int numLost;
     private Difficulty chosenDifficulty;
+    private boolean hasGameInProgress;
 
     //Image constants
     final private Image blankImage = new Image("blank.png");
@@ -24,6 +25,10 @@ public class TicTacToeGame extends Application
     final private Image oImage = new Image("O.png");
     final private Image xTransition = new Image("halfX.png");
     final private Image oTransition = new Image("halfO.png");
+
+    //title constants
+    final private String homeTitle = "Tic-Tac-Toe Menu";
+    final private String playTitle = "Play Tic-Tac-Toe";
 
     private Scene homeScene; //scene for selecting difficulty, playing, and seeing history
     private VBox homeSceneBox;
@@ -57,7 +62,7 @@ public class TicTacToeGame extends Application
     private HBox bottomInfo; //will hold nodes at bottom of border pane
     private Button backToHome;
     private TextField whoWonDisplay;
-    private Button exitGame; //used to quit game in progress
+    private Button cancelExitGame; //used to not quit mid-game
     private Button confirmExitGame; //used to save user from misclicks mid-game
 
     private void remakeBoard()
@@ -125,7 +130,7 @@ public class TicTacToeGame extends Application
 
 
 
-        
+
         //create left VBox with current settings and play button
 
         //text fields for displaying size and difficulty, disabled and style to not be greyed out
@@ -148,15 +153,58 @@ public class TicTacToeGame extends Application
         //combine the two VBoxes into an HBox
         bottomOfHomePane = new HBox(40, selectionAndPlayHolder, infoHolder);
 
-
-
-
-
-
+        homeSceneBox = new VBox(50, topMenu, bottomOfHomePane);
+        homeScene = new Scene(homeSceneBox, 600, 600);
     }
 
     private void createPlayScene()
     {
+        //text field to show location of most recent move
+        mostRecentMoveDisplay = new TextField("          ");
+        mostRecentMoveDisplay.setDisable(true);
+        mostRecentMoveDisplay.setStyle("-fx-opaque: 1.0");
+
+        //the board is created upon pressing the play button, not here, hence the minimal code
+        board = new GridPane();
+
+        playBox = new BorderPane();
+
+        backToHome = new Button("Return to Main Menu");
+        whoWonDisplay = new TextField("         ");
+        cancelExitGame = new Button("No, Keep Playing");
+        confirmExitGame = new Button("Yes, Leave Game");
+        backToHome.setOnAction(e->{
+            if(hasGameInProgress)
+            {
+                //unhide confirmation buttons and get user input
+                cancelExitGame.setVisible(true);
+                confirmExitGame.setVisible(true);
+            }
+            else //no game in progress, just return to home screen
+            {
+                primaryStage.setTitle(homeTitle);
+                primaryStage.setScene(homeScene);
+            }
+        });
+        confirmExitGame.setOnAction(e->{
+            primaryStage.setTitle(homeTitle);
+            primaryStage.setScene(homeScene);
+        });
+        cancelExitGame.setOnAction(e->{
+            //hide these buttons since we don't want to exit the game
+            confirmExitGame.setVisible(false);
+            cancelExitGame.setVisible(false);
+        });
+
+        //put the text field and button into an HBox
+        bottomInfo = new HBox(20, backToHome, confirmExitGame, cancelExitGame, whoWonDisplay);
+
+        //set the border pane
+        playBox.setTop(mostRecentMoveDisplay);
+        playBox.setCenter(board);
+        playBox.setBottom(bottomInfo);
+
+        playScene = new Scene(playBox);
 
     }
 
@@ -188,7 +236,8 @@ public class TicTacToeGame extends Application
 
         this.primaryStage = primaryStage; //set equal so we can reference the primary stage outside of start
         createScenes();
-        //TODO: add GUI
+        primaryStage.setTitle(homeTitle);
+        primaryStage.setScene(homeScene);
     }
 
 }
