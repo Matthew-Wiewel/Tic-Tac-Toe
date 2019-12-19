@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -16,6 +17,13 @@ public class TicTacToeGame extends Application
     private int numWon;
     private int numDrawn;
     private int numLost;
+
+    //Image constants
+    final private Image blankImage = new Image("blank.png");
+    final private Image xImage = new Image("X.png");
+    final private Image oImage = new Image("O.png");
+    final private Image xTransition = new Image("halfX.png");
+    final private Image oTransition = new Image("halfO.png");
 
     private Scene homeScene; //scene for selecting difficulty, playing, and seeing history
     private HBox homeSceneBox;
@@ -50,7 +58,8 @@ public class TicTacToeGame extends Application
 
     private void remakeBoard()
     {
-        //TODO, re-make the board each time the size is changed. Do not need to remake the entire play scene
+        boardImages = new ImageView[G.N][G.N];
+
     }
 
     private void createScenes()
