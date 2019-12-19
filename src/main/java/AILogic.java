@@ -28,6 +28,32 @@ class AILogic
     //getters and setters for AI's skill level and which player it is
     void setSkillLevel(int skillLevel)
     { maxDepth = skillLevel; }
+    void setSkillLevel(Difficulty chosenDifficulty)
+    {
+        switch(chosenDifficulty)
+        {
+            case EASY:
+            {
+                maxDepth = 1;
+                break;
+            }
+            case MEDIUM:
+            {
+                maxDepth = G.N;
+                break;
+            }
+            case HARD:
+            {
+                maxDepth = 2*G.N;
+                break;
+            }
+            case EXPERT:
+            {
+                maxDepth = G.N * G.N - 1;
+                break;
+            }
+        }
+    }
     void setPlayer(int isPlayer)
     {
         player = isPlayer; //set player to given player
