@@ -67,8 +67,27 @@ public class TicTacToeGame extends Application
 
     private void remakeBoard()
     {
-        boardImages = new ImageView[G.N][G.N];
+        //
+        if(boardSize == G.N) //case where we can reuse the memory, just reset the images
+        {
+            for(int i = 0; i < G.N; i++)
+                for(int j = 0; j < G.N; j++)
+                    boardImages[i][j].setImage(blankImage);
+        }
+        else //need to create a new board
+        {
+            G.N = boardSize; //update board size
+            boardImages = new ImageView[G.N][G.N];
 
+            for(int i = 0; i < G.N; i++)
+            {
+                for(int j = 0; j < G.N; j++)
+                {
+                    //TODO: boardImages[i][j] = new ImageView(blankImage);
+                    boardImages[i][j].setImage(blankImage);
+                }
+            }
+        }
     }
 
     private void createHomeScene()
@@ -160,7 +179,7 @@ public class TicTacToeGame extends Application
     private void createPlayScene()
     {
         //text field to show location of most recent move
-        mostRecentMoveDisplay = new TextField("          ");
+        mostRecentMoveDisplay = new TextField("");
         mostRecentMoveDisplay.setDisable(true);
         mostRecentMoveDisplay.setStyle("-fx-opaque: 1.0");
 
