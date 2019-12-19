@@ -86,7 +86,10 @@ public class TicTacToeGame extends Application
         boardSizeOptions.getItems().addAll(size3x3, size4x4, size5x5);
 
         difficultyOptions = new Menu("Difficulty");
-
+        selectEasy = new MenuItem("Easy");
+        selectMedium = new MenuItem("Medium");
+        selectHard = new MenuItem("Hard");
+        selectExpert = new MenuItem("Expert");
 
 
         //TODO, make play scene
