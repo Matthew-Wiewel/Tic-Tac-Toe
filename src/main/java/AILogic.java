@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+enum Difficulty { EASY, MEDIUM, HARD, EXPERT };
+
 //a class to handle the AI's logic
 class AILogic
 {
+    //TODO, this will get removed. The calculations will form the basis for difficulty later
     //package private static variables to give AI's skill levels meaningful names
     static int skillLevelEasy = 1; //used to denote when the AI is set to Easy
     static int skillLevelMedium; //medium skill level for AI
