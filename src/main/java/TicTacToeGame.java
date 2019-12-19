@@ -1,3 +1,4 @@
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -8,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class TicTacToeGame extends Application
 {
@@ -19,6 +21,8 @@ public class TicTacToeGame extends Application
     private Difficulty chosenDifficulty;
     private boolean hasGameInProgress;
     private AILogic ai;
+    private TTTBoard gameBoard;
+    private int player;
 
     //Image constants
     final private Image blankImage = new Image("blank.png");
@@ -69,7 +73,6 @@ public class TicTacToeGame extends Application
 
     private void remakeBoard()
     {
-        //
         if(boardSize == G.N) //case where we can reuse the memory, just reset the images
         {
             for(int i = 0; i < G.N; i++)
@@ -87,9 +90,46 @@ public class TicTacToeGame extends Application
                 {
                     //TODO if needed: boardImages[i][j] = new ImageView(blankImage);
                     boardImages[i][j].setImage(blankImage);
+
+                    int row = i; //variables used so that they can be in lambda
+                    int column = j;
                     boardImages[i][j].setOnMouseClicked(e->{
-                        //TODO, make move
+
+                        //make the move visually
+                        boardImages[row][column].setImage(player == G.X ? xTransition : oTransition);
+                        PauseTransition p = new PauseTransition(Duration.seconds(3));
+                        p.play();
+                        boardImages[row][column].setImage(player == G.X ? xImage : oImage);
+                        boardImages[row][column].setDisable(true);
+                        //TODO, make it not disabled visually though it's disabled in truth
+
+
+                        //make the move in TTTBoard member
+                        int currentResult = gameBoard.setAndCheckWin(player, row, column);
+                        if(currentResult == player) //win was found
+                        {
+                            numWon++;
+                            hasGameInProgress = false;
+                            whoWonDisplay.setText("Congratulations! You win!");
+                            priorGames.getItems().add("You won a game on a " + G.N + "x" + G.N + " board as " + G.toString(player));
+                            winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+                        }
+                        else if(currentResult == G.DRAW) //drawn game
+                        {
+                            numDrawn++;
+                            hasGameInProgress = false;
+                            whoWonDisplay.setText("The field is a draw!");
+                            priorGames.getItems().add("You drew on game on a " + G.N + "x" + G.N + " board as " + G.toString(player));
+                            winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+                        }
+                        else //game is still going on
+                        {
+                            //TODO, find AI move
+                        }
                     });
+
+                    //add ImageView to gridPane
+                    board.add(boardImages[i][j], i, j);
                 }
             }
         }
@@ -102,6 +142,9 @@ public class TicTacToeGame extends Application
 
         //and we'll have a game in progress
         hasGameInProgress = true;
+
+        //and create a TTTBoard class for this game
+        gameBoard = new TTTBoard();
     }
 
     private void createHomeScene()
@@ -190,7 +233,7 @@ public class TicTacToeGame extends Application
         selectionAndPlayHolder = new VBox(20, currentDifficultyDisplay, currentBoardSizeDisplay, playButton);
 
         priorGames = new ListView<>(); //create variables to display results of previous games and current stats
-        winDrawLossDisplay = new TextField("          ");
+        winDrawLossDisplay = new TextField(emptyTextField);
         infoHolder = new VBox(20, priorGames, winDrawLossDisplay);
 
         //combine the two VBoxes into an HBox
@@ -276,6 +319,7 @@ public class TicTacToeGame extends Application
         numWon = 0;
         hasGameInProgress = false;
         ai = new AILogic();
+        player = G.X;
         this.primaryStage = primaryStage; //set equal so we can reference the primary stage outside of start4
 
         createScenes();
