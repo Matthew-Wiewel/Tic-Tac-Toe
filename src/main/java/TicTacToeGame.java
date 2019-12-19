@@ -29,6 +29,7 @@ public class TicTacToeGame extends Application
     //title constants
     final private String homeTitle = "Tic-Tac-Toe Menu";
     final private String playTitle = "Play Tic-Tac-Toe";
+    final private String emptyTextField = "             ";
 
     private Scene homeScene; //scene for selecting difficulty, playing, and seeing history
     private VBox homeSceneBox;
@@ -83,11 +84,20 @@ public class TicTacToeGame extends Application
             {
                 for(int j = 0; j < G.N; j++)
                 {
-                    //TODO: boardImages[i][j] = new ImageView(blankImage);
+                    //TODO if needed: boardImages[i][j] = new ImageView(blankImage);
                     boardImages[i][j].setImage(blankImage);
                 }
             }
         }
+
+        //also make sure we start with a blank slate for info
+        mostRecentMoveDisplay.setText(emptyTextField);
+        whoWonDisplay.setText(emptyTextField);
+        cancelExitGame.setVisible(false);
+        confirmExitGame.setVisible(false);
+
+        //and we'll have a game in progress
+        hasGameInProgress = true;
     }
 
     private void createHomeScene()
@@ -179,7 +189,7 @@ public class TicTacToeGame extends Application
     private void createPlayScene()
     {
         //text field to show location of most recent move
-        mostRecentMoveDisplay = new TextField("");
+        mostRecentMoveDisplay = new TextField(emptyTextField);
         mostRecentMoveDisplay.setDisable(true);
         mostRecentMoveDisplay.setStyle("-fx-opaque: 1.0");
 
@@ -189,7 +199,7 @@ public class TicTacToeGame extends Application
         playBox = new BorderPane();
 
         backToHome = new Button("Return to Main Menu");
-        whoWonDisplay = new TextField("         ");
+        whoWonDisplay = new TextField(emptyTextField);
         cancelExitGame = new Button("No, Keep Playing");
         confirmExitGame = new Button("Yes, Leave Game");
         backToHome.setOnAction(e->{
@@ -252,6 +262,7 @@ public class TicTacToeGame extends Application
         numDrawn = 0;
         numLost = 0;
         numWon = 0;
+        hasGameInProgress = false;
 
         this.primaryStage = primaryStage; //set equal so we can reference the primary stage outside of start
         createScenes();
