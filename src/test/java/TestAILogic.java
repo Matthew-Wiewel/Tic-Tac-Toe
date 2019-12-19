@@ -40,6 +40,22 @@ class TestAILogic
     }
 
     @Test
+    void testSetSkillLevel2()
+    {
+        ai.setSkillLevel(Difficulty.EASY);
+        assertEquals(1, ai.getSkillLevel(), "Easy is not 1");
+
+        ai.setSkillLevel(Difficulty.MEDIUM);
+        assertEquals(G.N, ai.getSkillLevel(), "Medium is not G.N=" + G.N);
+
+        ai.setSkillLevel(Difficulty.HARD);
+        assertEquals(2*G.N, ai.getSkillLevel(), "Hard is not 2*G.N=" + 2*G.N);
+
+        ai.setSkillLevel(Difficulty.EXPERT);
+        assertEquals(G.N*G.N-1, ai.getSkillLevel(), "Expert is not G.N*G.N-1=" + G.N*G.N*-1);
+    }
+
+    @Test
     void testSetPlayer()
     {
         ai.setPlayer(G.X);
