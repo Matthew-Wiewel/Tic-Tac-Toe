@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -83,7 +85,33 @@ class AILogic
     //method called in GUI to find the AI's move
     Coordinate findMove(TTTBoard gameBoard)
     {
-       return null;
+        ArrayList<Pair<Coordinate,Integer>> moveOptions = new ArrayList<>();
+        for(Coordinate c : gameBoard.getOpenSpaces())
+        {
+            //make move for AI to start the search and find its value
+            TTTBoard tempBoard = new TTTBoard(gameBoard);
+            int tempStateValue = tempBoard.setAndCheckWin(player, c.getX(), c.getY());
+            int valueOfState = min(tempBoard, tempStateValue, 1);
+
+            //create pair based on this coordinate and value and add it to our list
+            Pair<Coordinate, Integer> tempPair = new Pair<>(c, valueOfState);
+            moveOptions.add(tempPair);
+        }
+
+        //now find the max valued move
+        Coordinate moveChoice = null;
+        int bestValue = Integer.MIN_VALUE;
+        for(Pair<Coordinate, Integer> p : moveOptions)
+        {
+            //if we find a better move than wehat 
+            if(p.getValue() > bestValue)
+            {
+                bestValue = p.getValue();
+                moveChoice = p.getKey();
+            }
+        }
+
+        return moveChoice;
     }
 
     private int max(TTTBoard gameBoard, int stateStatus, int depthTraversed)
