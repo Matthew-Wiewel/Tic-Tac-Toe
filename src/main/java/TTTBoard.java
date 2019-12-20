@@ -103,7 +103,9 @@ class TTTBoard
 
         if(numSameFound == G.N) //found the tiles for a win
             return player;
-        else //no win found at all
+        else if(openSpaces.isEmpty()) //no win, but also no more moves
+            return G.DRAW;
+        else //no win or draw found at all
             return G.BLANK;
     }
 
