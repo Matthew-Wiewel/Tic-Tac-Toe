@@ -33,7 +33,7 @@ class Coordinate //tested
         if(this == obj) //same reference is true
             return true;
 
-        if(obj.getClass().getName().equals("TTTBoard$Coordinate")) //check class
+        if(obj.getClass().getName().equals("Coordinate")) //check class
         {
             Coordinate other = (Coordinate)obj;
             return this.x == other.getX() && this.y == other.getY(); //compare coordinates

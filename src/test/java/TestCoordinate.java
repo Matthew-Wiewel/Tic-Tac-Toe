@@ -18,7 +18,7 @@ class TestCoordinate
     @Test
     void testClassName()
     {
-        assertEquals("TTTBoard$Coordinate", test.getClass().getName(), "TTTBoard.Coordinate class name is not as expected");
+        assertEquals("Coordinate", test.getClass().getName(), "TTTBoard.Coordinate class name is not as expected");
     }
 
     @Test
