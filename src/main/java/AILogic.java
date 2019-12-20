@@ -34,22 +34,22 @@ class AILogic
         {
             case EASY:
             {
-                maxDepth = 1;
+                maxDepth = 1; //easy only looks 1 move ahead
                 break;
             }
             case MEDIUM:
             {
-                maxDepth = G.N;
+                maxDepth = G.N; //medium will look N moves ahead
                 break;
             }
             case HARD:
             {
-                maxDepth = 2*G.N;
+                maxDepth = 2*G.N; //hard looks 2N ahead
                 break;
             }
             case EXPERT:
             {
-                maxDepth = G.N * G.N - 1;
+                maxDepth = G.N * G.N - 1; //expert considers all move until end of game
                 break;
             }
         }
@@ -95,6 +95,41 @@ class AILogic
 
        //TODO holder
         return null;
+    }
+
+    private Coordinate max(TTTBoard gameBoard, int stateStatus, int depthTraversed)
+    {
+        //TODO
+        return null;
+    }
+
+    private Coordinate min(TTTBoard gameBoard, int stateStatus, int depthTraversed)
+    {
+        //TODO
+        return null;
+    }
+
+    //method to test if we have reached a terminal state, either because a result has been reached or the depth traversed
+    //is at the max we're allowing
+    private boolean isTerminalState(int stateStatus, int depthTraversed)
+    {
+        return depthTraversed >= maxDepth || stateStatus == G.X || stateStatus == G.O || stateStatus == G.DRAW;
+    }
+
+    //method that looks at the status of a state and returns an integer value for it
+    //wins for the AI are high values, losses are low values, draws and continuing states
+    //are medium values. A random number is also added to each value to help randomize the
+    //resulting move chosen between equal values so that the AI doesn't always make the same move
+    private int getUtility(int stateStatus)
+    {
+        if(stateStatus == G.X && player == G.X || stateStatus == G.O && player == G.O) //AI wins
+            return 1000 + random.nextInt(100); //base value of 1000 plus a random number from 0-99
+        else if(stateStatus == G.DRAW ) //draw case
+            return 200 + random.nextInt(100);
+        else if(stateStatus == G.BLANK) //game continues case
+            return random.nextInt(100);
+        else //AI loses
+            return -1000 + random.nextInt(100);
     }
 
 }
