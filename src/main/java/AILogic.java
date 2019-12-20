@@ -97,16 +97,18 @@ class AILogic
         return null;
     }
 
-    private Coordinate max(TTTBoard gameBoard, int stateStatus, int depthTraversed)
+    private int max(TTTBoard gameBoard, int stateStatus, int depthTraversed)
     {
-        //TODO
-        return null;
+        if(isTerminalState(stateStatus, depthTraversed))
+            //TODO, return state value
+        return 0;
     }
 
-    private Coordinate min(TTTBoard gameBoard, int stateStatus, int depthTraversed)
+    private int min(TTTBoard gameBoard, int stateStatus, int depthTraversed)
     {
-        //TODO
-        return null;
+        if(isTerminalState(stateStatus, depthTraversed))
+            //TODO, return state value
+        return 0;
     }
 
     //method to test if we have reached a terminal state, either because a result has been reached or the depth traversed
