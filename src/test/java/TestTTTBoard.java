@@ -305,13 +305,13 @@ class TestTTTBoard
     }
 
     @Test
-    void testSetAndCheckWinSeesDraw()
+    void testSetAndCheckWinSeesGameContinue()
     {
-        //create positions that should be draws as registered
-        int[][] drawPos1 = new int[][]{{G.X, G.X, G.BLANK},{G.O, G.O, G.BLANK},{G.X, G.O, G.BLANK}}; //add X at 2,2
-        int[][] drawPos2 = new int[][]{{G.X, G.O, G.X},{G.O, G.X, G.O}, {G.BLANK, G.BLANK, G.BLANK}}; //add O at 2,1
-        int[][] drawPos3 = new int[][]{{G.O, G.X, G.O},{G.O, G.X, G.O},{G.X, G.O, G.BLANK}}; //add X at 2,2
-        int[][] drawPos4 = new int[][]{{G.X, G.O, G.BLANK},{G.BLANK, G.BLANK, G.BLANK},{G.BLANK, G.BLANK, G.BLANK}}; //add X to 1,1
+        //create positions that should be game continues as registered
+        int[][] contPos1 = new int[][]{{G.X, G.X, G.BLANK},{G.O, G.O, G.BLANK},{G.X, G.O, G.BLANK}}; //add X at 2,2
+        int[][] contPos2 = new int[][]{{G.X, G.O, G.X},{G.O, G.X, G.O}, {G.BLANK, G.BLANK, G.BLANK}}; //add O at 2,1
+        int[][] contPos3 = new int[][]{{G.O, G.X, G.O},{G.O, G.X, G.BLANK},{G.X, G.O, G.BLANK}}; //add X at 2,2
+        int[][] contPos4 = new int[][]{{G.X, G.O, G.BLANK},{G.BLANK, G.BLANK, G.BLANK},{G.BLANK, G.BLANK, G.BLANK}}; //add X to 1,1
 
         //first, check when adding 1 to an empty board
         for(int i = 0; i < G.N; i++)
@@ -325,17 +325,38 @@ class TestTTTBoard
         }
 
         //now do the tests with larger positions, no need for reset as we do setBoard calls
+        test.setBoard(contPos1);
+        assertEquals(G.BLANK, test.setAndCheckWin(G.X, 2, 2), "Failure with contPos1");
+
+        test.setBoard(contPos2);
+        assertEquals(G.BLANK, test.setAndCheckWin(G.O, 2, 1), "Failure with contPos2");
+
+        test.setBoard(contPos3);
+        assertEquals(G.BLANK, test.setAndCheckWin(G.X, 2, 2), "Failure with contPos3");
+
+        test.setBoard(contPos4);
+        assertEquals(G.BLANK, test.setAndCheckWin(G.X, 1, 1), "Failure with contPos4");
+    }
+
+    @Test
+    void testCheckWinSeesDraw()
+    {
+        int[][] drawPos1 = new int[][]{{G.O, G.O, G.X},{G.X, G.X, G.O},{G.O, G.BLANK, G.X}}; //add X at 2,1
+        int[][] drawPos2 = new int[][]{{G.X, G.O, G.X},{G.X, G.O, G.X},{G.O, G.X, G.BLANK}}; //add O at 2,2
+        int[][] drawPos3 = new int[][]{{G.O, G.X, G.O},{G.O, G.X, G.O},{G.X, G.O, G.BLANK}}; //add X at 2,2
+        int[][] drawPos4 = new int[][]{{G.X, G.X, G.O},{G.O, G.O, G.X},{G.X, G.BLANK, G.O}}; //add O at 2,1
+
         test.setBoard(drawPos1);
-        assertEquals(G.BLANK, test.setAndCheckWin(G.X, 2, 2), "Failure with drawPos1");
+        assertEquals(G.DRAW, test.setAndCheckWin(G.X, 2, 1), "Failure with drawPos1");
 
         test.setBoard(drawPos2);
-        assertEquals(G.BLANK, test.setAndCheckWin(G.O, 2, 1), "Failure with drawPos2");
+        assertEquals(G.DRAW, test.setAndCheckWin(G.O, 2, 2), "Failure with drawPos2");
 
         test.setBoard(drawPos3);
-        assertEquals(G.BLANK, test.setAndCheckWin(G.X, 2, 2), "Failure with drawPos3");
+        assertEquals(G.DRAW, test.setAndCheckWin(G.X, 2, 2), "Failure with drawPos3");
 
         test.setBoard(drawPos4);
-        assertEquals(G.BLANK, test.setAndCheckWin(G.X, 1, 1), "Failure with drawPos4");
+        assertEquals(G.DRAW, test.setAndCheckWin(G.O, 2, 1), "Failure with drawPos4");
     }
 
     @Test
