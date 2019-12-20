@@ -172,7 +172,7 @@ public class TicTacToeGame extends Application
 
     private void doAIMove()
     {
-        TTTBoard.Coordinate aiMove = ai.findMove(gameBoard);
+        Coordinate aiMove = ai.findMove(gameBoard);
 
         //visually make move
         PauseTransition p = new PauseTransition(Duration.seconds(pauseTime));

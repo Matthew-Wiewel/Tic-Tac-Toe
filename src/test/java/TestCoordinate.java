@@ -7,12 +7,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestCoordinate
 {
-    private TTTBoard.Coordinate test;
+    private Coordinate test;
 
     @BeforeEach
     void init()
     {
-        test = new TTTBoard.Coordinate(1,3);
+        test = new Coordinate(1,3);
     }
 
     @Test
@@ -48,8 +48,8 @@ class TestCoordinate
     @Test
     void testEquals()
     {
-        TTTBoard.Coordinate theEquals = new TTTBoard.Coordinate(1,3);
-        TTTBoard.Coordinate theNotEquals = new TTTBoard.Coordinate(4,5);
+        Coordinate theEquals = new Coordinate(1,3);
+        Coordinate theNotEquals = new Coordinate(4,5);
         Integer integer = 0;
 
         //do tests of equality and inequality, making sure results are commutaive
@@ -69,7 +69,7 @@ class TestCoordinate
     @Test
     void testCopyConstructor()
     {
-        TTTBoard.Coordinate other = new TTTBoard.Coordinate(test); //created copy-constructed coordinate
+        Coordinate other = new Coordinate(test); //created copy-constructed coordinate
 
         //now that we know the equals works, use it to determine we've truly copied the board
         assertEquals(other, test, "Copy constructed Coordinate not equal to what it copied");

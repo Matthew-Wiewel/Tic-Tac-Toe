@@ -84,7 +84,7 @@ class TestTTTBoard
     @Test
     void testGetOpenSpaces()
     {
-        ArrayList<TTTBoard.Coordinate> other = test.getOpenSpaces();
+        ArrayList<Coordinate> other = test.getOpenSpaces();
 
         assertSame(test.getOpenSpaces(), other, "getOpenSpaces does not return reference to member var");
         assertEquals(other, test.getOpenSpaces(), "Values from openSpaces not accurate when gotten");
@@ -93,7 +93,7 @@ class TestTTTBoard
     @Test
     void testGetOpenSpacesDeepCopy()
     {
-        ArrayList<TTTBoard.Coordinate> other = test.getOpenSpacesDeepCopy();
+        ArrayList<Coordinate> other = test.getOpenSpacesDeepCopy();
         assertNotSame(other, test.getOpenSpaces(), "deep copy not returned");
         assertEquals(other, test.getOpenSpaces(), "deep copy not accurate with its values");
     }
@@ -118,8 +118,8 @@ class TestTTTBoard
         test.setBoard(new int[][]{ {1,0,0} , {-1,-1,0} , {1,-1,1}}); //set the board
 
         //create an ArrayList of what we're expecting
-        ArrayList<TTTBoard.Coordinate> compareTo = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(0,1), new TTTBoard.Coordinate(0,2), new TTTBoard.Coordinate(1,2)));
+        ArrayList<Coordinate> compareTo = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(0,1), new Coordinate(0,2), new Coordinate(1,2)));
 
         assertEquals(compareTo, test.getOpenSpaces(), "setBoard not reflecting openSpaces correctly");
     }
@@ -153,10 +153,10 @@ class TestTTTBoard
         assertEquals(G.N*G.N, test.getOpenSpaces().size(), "Reset does not bring openSpaces to right size.");
 
         //see the openSpaces has the right values
-        ArrayList<TTTBoard.Coordinate> compareTo = new ArrayList<TTTBoard.Coordinate>();
+        ArrayList<Coordinate> compareTo = new ArrayList<Coordinate>();
         for(int i = 0; i < G.N; i++)
             for(int j = 0; j < G.N; j++)
-                compareTo.add(new TTTBoard.Coordinate(i,j));
+                compareTo.add(new Coordinate(i,j));
 
         assertEquals(compareTo, test.getOpenSpaces(), "Reset does not give openSpaces the right coordinates");
     }
@@ -186,10 +186,10 @@ class TestTTTBoard
     {
         //tests that when adding elements via setAndCheckWin, we remove those coordinates from the
         int openSpacesLengthBefore = 0;
-        ArrayList<TTTBoard.Coordinate> expectedList = new ArrayList<TTTBoard.Coordinate>();
+        ArrayList<Coordinate> expectedList = new ArrayList<Coordinate>();
         for(int i = 0; i < G.N; i++)
             for(int j = 0; j < G.N; j++)
-                expectedList.add(new TTTBoard.Coordinate(i,j));
+                expectedList.add(new Coordinate(i,j));
 
         for(int i = 0; i < G.N; i++)
         {
@@ -217,16 +217,16 @@ class TestTTTBoard
         int[][] xWinPos5 = new int[][]{{G.O,G.O,G.BLANK},{G.O,G.X,G.BLANK},{G.X,G.BLANK,G.X}}; //place X 2,1
 
         //set ArrayLists with the expected winning tiles of each position
-        ArrayList<TTTBoard.Coordinate> xWinTiles1 = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(0,0), new TTTBoard.Coordinate(1,1), new TTTBoard.Coordinate(2,2)));
-        ArrayList<TTTBoard.Coordinate> xWinTiles2 = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(0,2), new TTTBoard.Coordinate(1,1), new TTTBoard.Coordinate(2,0)));
-        ArrayList<TTTBoard.Coordinate> xWinTiles3 = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(0,0), new TTTBoard.Coordinate(1,1), new TTTBoard.Coordinate(2,2)));
-        ArrayList<TTTBoard.Coordinate> xWinTiles4 = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(0,0), new TTTBoard.Coordinate(1,0), new TTTBoard.Coordinate(2,0)));
-        ArrayList<TTTBoard.Coordinate> xWinTiles5 = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(2,0), new TTTBoard.Coordinate(2,1), new TTTBoard.Coordinate(2,2)));
+        ArrayList<Coordinate> xWinTiles1 = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(0,0), new Coordinate(1,1), new Coordinate(2,2)));
+        ArrayList<Coordinate> xWinTiles2 = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(0,2), new Coordinate(1,1), new Coordinate(2,0)));
+        ArrayList<Coordinate> xWinTiles3 = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(0,0), new Coordinate(1,1), new Coordinate(2,2)));
+        ArrayList<Coordinate> xWinTiles4 = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(0,0), new Coordinate(1,0), new Coordinate(2,0)));
+        ArrayList<Coordinate> xWinTiles5 = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(2,0), new Coordinate(2,1), new Coordinate(2,2)));
 
 
         //test win and tiles on top-left to bottom-right diagonal
@@ -266,16 +266,16 @@ class TestTTTBoard
         int[][] oWinPos5 = new int[][]{{G.X,G.X,G.BLANK},{G.X,G.BLANK,G.O},{G.BLANK,G.BLANK,G.O}}; //add O 0,2
 
         //set ArrayLists with the expected winning tiles of each position
-        ArrayList<TTTBoard.Coordinate> oWinTiles1 = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(0,0), new TTTBoard.Coordinate(1,1), new TTTBoard.Coordinate(2,2)));
-        ArrayList<TTTBoard.Coordinate> oWinTiles2 = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(0,2), new TTTBoard.Coordinate(1,1), new TTTBoard.Coordinate(2,0)));
-        ArrayList<TTTBoard.Coordinate> oWinTiles3 = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(0,0), new TTTBoard.Coordinate(1,1), new TTTBoard.Coordinate(2,2)));
-        ArrayList<TTTBoard.Coordinate> oWinTiles4 = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(1,0), new TTTBoard.Coordinate(1,1), new TTTBoard.Coordinate(1,2)));
-        ArrayList<TTTBoard.Coordinate> oWinTiles5 = new ArrayList<TTTBoard.Coordinate>(Arrays.asList(
-                new TTTBoard.Coordinate(0,2), new TTTBoard.Coordinate(1,2), new TTTBoard.Coordinate(2,2)));
+        ArrayList<Coordinate> oWinTiles1 = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(0,0), new Coordinate(1,1), new Coordinate(2,2)));
+        ArrayList<Coordinate> oWinTiles2 = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(0,2), new Coordinate(1,1), new Coordinate(2,0)));
+        ArrayList<Coordinate> oWinTiles3 = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(0,0), new Coordinate(1,1), new Coordinate(2,2)));
+        ArrayList<Coordinate> oWinTiles4 = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(1,0), new Coordinate(1,1), new Coordinate(1,2)));
+        ArrayList<Coordinate> oWinTiles5 = new ArrayList<Coordinate>(Arrays.asList(
+                new Coordinate(0,2), new Coordinate(1,2), new Coordinate(2,2)));
 
 
         //test top-left to bottom-right diagonal win
