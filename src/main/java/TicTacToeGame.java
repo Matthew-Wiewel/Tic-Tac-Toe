@@ -36,6 +36,9 @@ public class TicTacToeGame extends Application
     final private String playTitle = "Play Tic-Tac-Toe";
     final private String emptyTextField = "             ";
 
+    //pause constant
+    final private int pauseTime = 3;
+
     private Scene homeScene; //scene for selecting difficulty, playing, and seeing history
     private VBox homeSceneBox;
     private MenuBar topMenu; //used for menu to go across top of the screen
@@ -51,8 +54,12 @@ public class TicTacToeGame extends Application
     private MenuItem selectMedium;
     private MenuItem selectHard;
     private MenuItem selectExpert;
+    private Menu playAsOptions;
+    private MenuItem playX;
+    private MenuItem playO;
     private HBox bottomOfHomePane; //used to hold the two VBoxes below
     private VBox selectionAndPlayHolder; //used to hold displays of current selections and play button
+    private TextField currentPlayerDisplay;
     private TextField currentBoardSizeDisplay;
     private TextField currentDifficultyDisplay;
     private Button playButton;
@@ -71,6 +78,22 @@ public class TicTacToeGame extends Application
     private Button cancelExitGame; //used to not quit mid-game
     private Button confirmExitGame; //used to save user from misclicks mid-game
 
+    private String getDifficulty()
+    {
+        switch(chosenDifficulty)
+        {
+            case EASY:
+                return " on easy mode.";
+            case MEDIUM:
+                return " on medium mode.";
+            case HARD:
+                return " on hard mode.";
+            case EXPERT:
+                return " on expert mode.";
+            default:
+                return null;
+        }
+    }
     private void remakeBoard()
     {
         if(boardSize == G.N) //case where we can reuse the memory, just reset the images
@@ -97,7 +120,7 @@ public class TicTacToeGame extends Application
 
                         //make the move visually
                         boardImages[row][column].setImage(player == G.X ? xTransition : oTransition);
-                        PauseTransition p = new PauseTransition(Duration.seconds(3));
+                        PauseTransition p = new PauseTransition(Duration.seconds(pauseTime));
                         p.play();
                         boardImages[row][column].setImage(player == G.X ? xImage : oImage);
                         boardImages[row][column].setDisable(true);
@@ -105,13 +128,13 @@ public class TicTacToeGame extends Application
 
 
                         //make the move in TTTBoard member
-                        int currentResult = gameBoard.setAndCheckWin(player, row, column);
+                        int currentResult = gameBoard.setAndCheckWin(player, row, column); //TODO, modify this method
                         if(currentResult == player) //win was found
                         {
                             numWon++;
                             hasGameInProgress = false;
                             whoWonDisplay.setText("Congratulations! You win!");
-                            priorGames.getItems().add("You won a game on a " + G.N + "x" + G.N + " board as " + G.toString(player));
+                            priorGames.getItems().add("You won a game on a " + G.N + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
                             winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
                         }
                         else if(currentResult == G.DRAW) //drawn game
@@ -119,12 +142,12 @@ public class TicTacToeGame extends Application
                             numDrawn++;
                             hasGameInProgress = false;
                             whoWonDisplay.setText("The field is a draw!");
-                            priorGames.getItems().add("You drew on game on a " + G.N + "x" + G.N + " board as " + G.toString(player));
+                            priorGames.getItems().add("You drew on game on a " + G.N + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
                             winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
                         }
                         else //game is still going on
                         {
-                            //TODO, find AI move
+                            doAIMove();
                         }
                     });
 
@@ -145,6 +168,37 @@ public class TicTacToeGame extends Application
 
         //and create a TTTBoard class for this game
         gameBoard = new TTTBoard();
+    }
+
+    private void doAIMove()
+    {
+        TTTBoard.Coordinate aiMove = ai.findMove(gameBoard);
+
+        //visually make move
+        PauseTransition p = new PauseTransition(Duration.seconds(pauseTime));
+        boardImages[aiMove.getX()][aiMove.getY()].setImage(ai.getPlayer() == G.X ? xTransition : oTransition);
+        p.play();
+        boardImages[aiMove.getX()][aiMove.getY()].setImage(ai.getPlayer() == G.X ? xImage : oImage);
+
+        //make move on board
+        int aiResult = gameBoard.setAndCheckWin(ai.getPlayer(), aiMove.getX(), aiMove.getY());
+
+        if(aiResult == ai.getPlayer()) //AI has won
+        {
+            numLost++;
+            hasGameInProgress = false;
+            whoWonDisplay.setText("Sorry. You lost to a computer.");
+            priorGames.getItems().add("You lost a game on a " + G.N  + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
+            winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+        }
+        else if(aiResult == G.DRAW) //draw result
+        {
+            numDrawn++;
+            hasGameInProgress = false;
+            whoWonDisplay.setText("The field is a draw!");
+            priorGames.getItems().add("You drew a game on a " + G.N  + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
+            winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+        }
     }
 
     private void createHomeScene()
@@ -207,7 +261,22 @@ public class TicTacToeGame extends Application
         });
         difficultyOptions.getItems().addAll(selectEasy, selectMedium, selectHard, selectExpert);
 
-        topMenu.getMenus().addAll(options, boardSizeOptions, difficultyOptions);
+        playAsOptions = new Menu("Choose Side"); //menu to choose being X or O
+        playX = new MenuItem("Player X");
+        playO = new MenuItem("Player O");
+        playX.setOnAction(e->{
+            player = G.X;
+            ai.setPlayer(G.O);
+            currentPlayerDisplay.setText("You are Player X");
+        });
+        playO.setOnAction(e->{
+            player = G.O;
+            ai.setPlayer(G.X);
+            currentPlayerDisplay.setText("You are Player O");
+        });
+        playAsOptions.getItems().addAll(playX, playO);
+
+        topMenu.getMenus().addAll(options, boardSizeOptions, difficultyOptions, playAsOptions);
 
 
 
@@ -215,12 +284,15 @@ public class TicTacToeGame extends Application
         //create left VBox with current settings and play button
 
         //text fields for displaying size and difficulty, disabled and style to not be greyed out
+        currentPlayerDisplay = new TextField("You are Player X");
         currentDifficultyDisplay = new TextField("Easy");
         currentBoardSizeDisplay = new TextField("3x3 Board");
+        currentPlayerDisplay.setDisable(true);
         currentDifficultyDisplay.setDisable(true);
         currentBoardSizeDisplay.setDisable(true);
         currentDifficultyDisplay.setStyle("-fx-opacity: 1.0");
         currentBoardSizeDisplay.setStyle("-fx-opacity: 1.0");
+        currentPlayerDisplay.setStyle("-fx-opacity: 1.0");
 
         playButton = new Button("Play A Game!"); //button for playing a game
         playButton.setOnAction(e->{
@@ -228,9 +300,13 @@ public class TicTacToeGame extends Application
             ai.setSkillLevel(chosenDifficulty); //set up difficulty
             primaryStage.setTitle(playTitle); //and change over to playing scene
             primaryStage.setScene(playScene);
+
+            //and if AI is X, have them do first move
+            if(ai.getPlayer() == G.X)
+                doAIMove();
         });
 
-        selectionAndPlayHolder = new VBox(20, currentDifficultyDisplay, currentBoardSizeDisplay, playButton);
+        selectionAndPlayHolder = new VBox(20, currentPlayerDisplay, currentDifficultyDisplay, currentBoardSizeDisplay, playButton);
 
         priorGames = new ListView<>(); //create variables to display results of previous games and current stats
         winDrawLossDisplay = new TextField(emptyTextField);
