@@ -298,6 +298,7 @@ public class TicTacToeGame extends Application
         playButton.setOnAction(e->{
             remakeBoard(); //set up board
             ai.setSkillLevel(chosenDifficulty); //set up difficulty
+            ai.setPlayer(player == G.X ? G.O : G.X); //set AI to opposite of human
             primaryStage.setTitle(playTitle); //and change over to playing scene
             primaryStage.setScene(playScene);
 
