@@ -83,32 +83,53 @@ class AILogic
     //method called in GUI to find the AI's move
     Coordinate findMove(TTTBoard gameBoard)
     {
-        ArrayList<Coordinate> moveOptions =  findMoveHelperMax(gameBoard, 0);
-        return moveOptions.get(random.nextInt(moveOptions.size())); //return a random Coordinate that the AI thinks is okay to make
-    }
-
-    //method to find a list of moves the AI may make, this is the max function of minimax
-    private ArrayList<Coordinate> findMoveHelperMax(TTTBoard gameBoard, int depthTraversed)
-    {
-       if(depthTraversed > maxDepth) //if we're deeper than the depth we want to traverse down, any open moves are fair game
-           return gameBoard.getOpenSpaces();
-
-       //TODO holder
-        return null;
+       return null;
     }
 
     private int max(TTTBoard gameBoard, int stateStatus, int depthTraversed)
     {
+        //if we are in a terminal state, return its value
         if(isTerminalState(stateStatus, depthTraversed))
-            //TODO, return state value
-        return 0;
+            return getUtility(stateStatus);
+
+        int maxValue = Integer.MIN_VALUE; //declare value initialized to min at first
+
+        //go through all the possible moves of the gameBoard
+        for(Coordinate c : gameBoard.getOpenSpaces())
+        {
+            //make a possible move for AI
+            TTTBoard tempBoard = new TTTBoard(gameBoard);
+            int tempStateValue = tempBoard.setAndCheckWin(player, c.getX(), c.getY());
+            //store value of this possible move into a temporary value
+            int temp = min(tempBoard, tempStateValue, depthTraversed + 1);
+            if(temp > maxValue) //if we've found a better state, choose that value
+                maxValue = temp;
+        }
+
+        return maxValue;
     }
 
     private int min(TTTBoard gameBoard, int stateStatus, int depthTraversed)
     {
+        //if we are in a terminal state, return its value
         if(isTerminalState(stateStatus, depthTraversed))
-            //TODO, return state value
-        return 0;
+            return getUtility(stateStatus);
+
+        int minValue = Integer.MAX_VALUE; //declare value initialized to max at first
+
+        //go through all the possible moves of the gameBoard
+        for(Coordinate c : gameBoard.getOpenSpaces())
+        {
+            //make a possible move for opponent
+            TTTBoard tempBoard = new TTTBoard(gameBoard);
+            int tempStateValue = tempBoard.setAndCheckWin(player == G.X ? G.O : G.X, c.getX(), c.getY());
+            //store value of this possible move into a temporary value
+            int temp = min(tempBoard, tempStateValue, depthTraversed + 1);
+            if(temp < minValue) //if we've found a better state, choose that value
+                minValue = temp;
+        }
+
+        return minValue;
     }
 
     //method to test if we have reached a terminal state, either because a result has been reached or the depth traversed
