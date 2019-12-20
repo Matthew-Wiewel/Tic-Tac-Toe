@@ -111,8 +111,8 @@ public class TicTacToeGame extends Application
             {
                 for(int j = 0; j < G.N; j++)
                 {
-                    //TODO if needed: boardImages[i][j] = new ImageView(blankImage);
-                    boardImages[i][j].setImage(blankImage);
+                    boardImages[i][j] = new ImageView(blankImage);
+                    //boardImages[i][j].setImage(blankImage);
 
                     int row = i; //variables used so that they can be in lambda
                     int column = j;
@@ -366,7 +366,7 @@ public class TicTacToeGame extends Application
         playBox.setCenter(board);
         playBox.setBottom(bottomInfo);
 
-        playScene = new Scene(playBox);
+        playScene = new Scene(playBox, 2000, 1000);
 
     }
 
@@ -401,6 +401,7 @@ public class TicTacToeGame extends Application
         createScenes();
         primaryStage.setTitle(homeTitle);
         primaryStage.setScene(homeScene);
+        primaryStage.show();
     }
 
 }
