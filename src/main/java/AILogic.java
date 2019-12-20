@@ -103,7 +103,7 @@ class AILogic
         int bestValue = Integer.MIN_VALUE;
         for(Pair<Coordinate, Integer> p : moveOptions)
         {
-            //if we find a better move than wehat 
+            //if we find a better move than what we've had before, change our choice
             if(p.getValue() > bestValue)
             {
                 bestValue = p.getValue();
