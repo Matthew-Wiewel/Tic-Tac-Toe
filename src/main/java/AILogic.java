@@ -152,7 +152,7 @@ class AILogic
             TTTBoard tempBoard = new TTTBoard(gameBoard);
             int tempStateValue = tempBoard.setAndCheckWin(player == G.X ? G.O : G.X, c.getX(), c.getY());
             //store value of this possible move into a temporary value
-            int temp = min(tempBoard, tempStateValue, depthTraversed + 1);
+            int temp = max(tempBoard, tempStateValue, depthTraversed + 1);
             if(temp < minValue) //if we've found a better state, choose that value
                 minValue = temp;
         }
