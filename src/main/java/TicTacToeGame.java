@@ -228,7 +228,7 @@ public class TicTacToeGame extends Application
         freshStart.setOnAction(e->{
             //clear everything related to prior games
             winDrawLossDisplay.setText(emptyTextField);
-            priorGames.getItems().removeAll();
+            priorGames.getItems().clear();
             numWon = 0;
             numLost = 0;
             numDrawn = 0;
@@ -383,7 +383,7 @@ public class TicTacToeGame extends Application
         playBox.setCenter(board);
         playBox.setBottom(bottomInfo);
 
-        playScene = new Scene(playBox, 2000, 1000);
+        playScene = new Scene(playBox, 1000, 1000);
 
     }
 
@@ -397,7 +397,7 @@ public class TicTacToeGame extends Application
     public static void main(String[] args)
     {
         //TODO: uncomment this line once you're ready to add the GUI.
-        //launch(args);
+        launch(args);
     }
 
     @Override
