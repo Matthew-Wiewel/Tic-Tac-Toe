@@ -1,7 +1,12 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestAILogic
 {
@@ -67,10 +72,21 @@ class TestAILogic
         assertEquals(G.X, ai.getOpponent(), "Setting AI to O does not make opponent X");
     }
 
-    /*
-    Test of the search function will be done by creating boards and then asserting that an ArrayList of
-    coordinates contains the returned coordinate. (Those coordinates that are acceptable will be determined by me
-    looking at what options it should return given a particular board. These tests should be run in a for loop due to
-    the randomness expected from the search to make sure we get all possible results.
-     */
+    @Test
+    void testExpert1()
+    {
+        //test to see that expert realizes that when the opponent takes a corner as the first move, the center is necessary
+        ai.setPlayer(G.O);
+        ai.setSkillLevel(Difficulty.EXPERT);
+        int[][] gameBoard = new int[][]{
+                {G.X, G.BLANK, G.BLANK},
+                {G.BLANK, G.BLANK, G.BLANK},
+                {G.BLANK, G.BLANK, G.BLANK}};
+        board.setBoard(gameBoard);
+        ArrayList<Coordinate> expectedResults = new ArrayList<Coordinate>(Arrays.asList(new Coordinate(1, 1)));
+
+        Coordinate move = ai.findMove(board);
+
+        assertTrue(expectedResults.contains(move), "Incorrect move of " + move.getX() + "," + move.getY() + " returned.");
+    }
 }
