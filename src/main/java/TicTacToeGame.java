@@ -94,13 +94,24 @@ public class TicTacToeGame extends Application
                 return null;
         }
     }
+
+    //method to enable or disable all the squares of the board
+    private void setBoardDisable(boolean enablement)
+    {
+        for(int i = 0; i < G.N; i++)
+            for(int j = 0; j < G.N; j++)
+                boardImages[i][j].setDisable(enablement);
+    }
+
     private void remakeBoard()
     {
         if(boardSize == G.N) //case where we can reuse the memory, just reset the images
         {
             for(int i = 0; i < G.N; i++)
-                for(int j = 0; j < G.N; j++)
+                for (int j = 0; j < G.N; j++)
                     boardImages[i][j].setImage(blankImage);
+
+            setBoardDisable(false);
         }
         else //need to create a new board
         {
@@ -136,6 +147,7 @@ public class TicTacToeGame extends Application
                             whoWonDisplay.setText("Congratulations! You win!");
                             priorGames.getItems().add("You won a game on a " + G.N + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
                             winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+                            setBoardDisable(true); //with the game being over, disable the board
                         }
                         else if(currentResult == G.DRAW) //drawn game
                         {
@@ -144,6 +156,7 @@ public class TicTacToeGame extends Application
                             whoWonDisplay.setText("The field is a draw!");
                             priorGames.getItems().add("You drew on game on a " + G.N + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
                             winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+                            setBoardDisable(true);
                         }
                         else //game is still going on
                         {
@@ -179,6 +192,7 @@ public class TicTacToeGame extends Application
         boardImages[aiMove.getX()][aiMove.getY()].setImage(ai.getPlayer() == G.X ? xTransition : oTransition);
         p.play();
         boardImages[aiMove.getX()][aiMove.getY()].setImage(ai.getPlayer() == G.X ? xImage : oImage);
+        boardImages[aiMove.getX()][aiMove.getY()].setDisable(true); //ai claimed this square, so disable it
 
         //make move on board
         int aiResult = gameBoard.setAndCheckWin(ai.getPlayer(), aiMove.getX(), aiMove.getY());
@@ -190,6 +204,7 @@ public class TicTacToeGame extends Application
             whoWonDisplay.setText("Sorry. You lost to a computer.");
             priorGames.getItems().add("You lost a game on a " + G.N  + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
             winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+            setBoardDisable(true); //and with a game over, disable the board
         }
         else if(aiResult == G.DRAW) //draw result
         {
@@ -198,6 +213,7 @@ public class TicTacToeGame extends Application
             whoWonDisplay.setText("The field is a draw!");
             priorGames.getItems().add("You drew a game on a " + G.N  + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
             winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+            setBoardDisable(true);
         }
     }
 
