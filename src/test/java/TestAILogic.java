@@ -89,4 +89,48 @@ class TestAILogic
 
         assertTrue(expectedResults.contains(move), "Incorrect move of " + move.getX() + "," + move.getY() + " returned.");
     }
+
+    @Test
+    void testExpert2()
+    {
+        //a test to see ai uses same logic and gets same results as both X or O
+        ai.setPlayer(G.X);
+        ai.setSkillLevel(Difficulty.EXPERT);
+        int[][] gameBoard = new int[][]{
+                {G.O, G.BLANK, G.BLANK},
+                {G.BLANK, G.BLANK, G.BLANK},
+                {G.BLANK, G.BLANK, G.BLANK}};
+        board.setBoard(gameBoard);
+        ArrayList<Coordinate> expectedResults = new ArrayList<Coordinate>(Arrays.asList(new Coordinate(1, 1)));
+
+        //do multiple tests to ensure correct result is always returned
+        for(int i = 0; i < 15; i++)
+        {
+            Coordinate move = ai.findMove(board);
+            assertTrue(expectedResults.contains(move), "Incorrect move of " + move.getX() + "," + move.getY() + " returned.");
+        }
+    }
+
+    @Test
+    void testExpert3()
+    {
+        //TODO
+        ai.setPlayer(G.O);
+        ai.setSkillLevel(Difficulty.EXPERT);
+        int[][] gameBoard = new int[][]{
+                {G.O, G.BLANK, G.BLANK},
+                {G.BLANK, G.X, G.BLANK},
+                {G.BLANK, G.BLANK, G.O}};
+        board.setBoard(gameBoard);
+        ArrayList<Coordinate> expectedResults = new ArrayList<Coordinate>(Arrays.asList(new Coordinate(0, 2),
+                new Coordinate(2, 0), new Coordinate(2, 2)));
+
+        //run the test multiple times to ensure it continuously gives results within the valid range
+        for (int i = 0; i < 20; i++)
+        {
+            Coordinate move = ai.findMove(board);
+            assertTrue(expectedResults.contains(move), "Incorrect move of " + move.getX() + "," + move.getY() + " returned." +
+                    "\nIssue in iteration " + i);
+        }
+    }
 }
