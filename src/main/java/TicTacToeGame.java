@@ -74,6 +74,8 @@ public class TicTacToeGame extends Application
     private VBox infoHolder;
     private ListView<String> priorGames;
     private TextField winDrawLossDisplay;
+    private VBox rulesHolder;
+    private Label rulesDoc;
 
     private Scene playScene; //used for playing the game of Tic Tac Toe
     private VBox playBox; //used to hold the GUI in this scene
@@ -374,8 +376,20 @@ public class TicTacToeGame extends Application
         winDrawLossDisplay.setStyle("-fx-opacity: 1.0");
         infoHolder = new VBox(20, priorGames, winDrawLossDisplay);
 
+        rulesDoc = new Label();
+        rulesDoc.setWrapText(true);
+        rulesDoc.setText("\nRules of Tic Tac Toe" +
+                "\n\nGoal: Get a line of your mark in a row. They can be horizontal" +
+                ", vertical, or diagonal."
+                + "\n\nX moves first" +
+                "\n\nTo make a move, click on the square you wish to place your mark in." +
+                "\n\nIf no moves are possible and there is not a winner yet, the game is a draw.");
+        rulesHolder = new VBox(20, rulesDoc);
+        rulesHolder.setStyle("-fx-background-color: gold");
+        rulesHolder.setMaxWidth(250); //make sure this box isn't too large
+
         //combine the two VBoxes into an HBox
-        bottomOfHomePane = new HBox(40, selectionAndPlayHolder, infoHolder);
+        bottomOfHomePane = new HBox(40, selectionAndPlayHolder, infoHolder, rulesHolder);
 
         homeSceneBox = new VBox(50, topMenu, bottomOfHomePane);
         homeSceneBox.setStyle("-fx-background-color: blue");
