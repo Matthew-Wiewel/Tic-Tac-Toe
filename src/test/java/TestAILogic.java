@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class TestAILogic
 {
@@ -156,5 +157,106 @@ class TestAILogic
         assertTrue(results.contains(new Coordinate(0,2)), "Bad move: Coordinate 0,2 not contained");
         assertTrue(results.contains(new Coordinate(2,0)), "Bad move: 2,0 not contained");
         assertTrue(results.contains(new Coordinate(1,1)), "Good move: 1,1 not contained");
+    }
+
+    @Test
+    void testMedium2()
+    {
+        ai.setPlayer(G.O);
+        ai.setSkillLevel(Difficulty.MEDIUM);
+        int[][] gameBoard = new int[][]{
+                {G.X, G.BLANK, G.BLANK},
+                {G.BLANK, G.O, G.BLANK},
+                {G.BLANK, G.BLANK, G.X}};
+        board.setBoard(gameBoard);
+        ArrayList<Coordinate> results = new ArrayList<>(); //list to hold what find move returns
+
+        //run tests a bunch of times to ensure odds of each possible move showing up at least once
+        for (int i = 0; i < 100; i++)
+        {
+            Coordinate move = ai.findMove(board);
+            if(!results.contains(move))
+                results.add(move);
+        }
+
+        //now test to see that some good and some bad choices are made
+        assertTrue(results.contains(new Coordinate(0,2)), "Bad move: Coordinate 0,2 not contained");
+        assertTrue(results.contains(new Coordinate(2,0)), "Bad move: 2,0 not contained");
+        assertTrue(results.contains(new Coordinate(1,0)), "Good move: 1,1 not contained");
+    }
+
+    @Test
+    void testHard1()
+    {
+        ai.setPlayer(G.X);
+        ai.setSkillLevel(Difficulty.HARD);
+        int[][] gameBoard = new int[][]{
+                {G.X, G.BLANK, G.BLANK},
+                {G.BLANK, G.O, G.BLANK},
+                {G.BLANK, G.BLANK, G.X}};
+        board.setBoard(gameBoard);
+        ArrayList<Coordinate> results = new ArrayList<>(); //list to hold what find move returns
+
+        //run tests a bunch of times to ensure odds of each possible move showing up at least once
+        for (int i = 0; i < 100; i++)
+        {
+            Coordinate move = ai.findMove(board);
+            if(!results.contains(move))
+                results.add(move);
+        }
+
+        //now test to see that some good and some bad choices are made
+        assertTrue(results.contains(new Coordinate(0,2)), "Good move: Coordinate 0,2 not contained");
+        assertTrue(results.contains(new Coordinate(2,0)), "Good move: 2,0 not contained");
+        assertFalse(results.contains(new Coordinate(1,0)), "Bad move: 1,1 contained");
+    }
+
+    @Test
+    void testEasy1()
+    {
+        ai.setPlayer(G.O);
+        ai.setSkillLevel(Difficulty.EASY);
+        int[][] gameBoard = new int[][]{
+                {G.X, G.BLANK, G.BLANK},
+                {G.BLANK, G.O, G.BLANK},
+                {G.BLANK, G.BLANK, G.X}};
+        board.setBoard(gameBoard);
+        ArrayList<Coordinate> results = new ArrayList<>(); //list to hold what find move returns
+
+        //run tests a bunch of times to ensure odds of each possible move showing up at least once
+        for (int i = 0; i < 100; i++)
+        {
+            Coordinate move = ai.findMove(board);
+            if(!results.contains(move))
+                results.add(move);
+        }
+
+        //now test to see that every single option, whether it's good or bad in the long run, is seen
+        assertTrue(results.contains(new Coordinate(0,1)), "0,1 not contained");
+        assertTrue(results.contains(new Coordinate(0,2)), "0,2 not contained");
+        assertTrue(results.contains(new Coordinate(1,0)), "1,0 not contained");
+        assertTrue(results.contains(new Coordinate(1,2)), "1,2 not contained");
+        assertTrue(results.contains(new Coordinate(2,0)), "2,0 not contained");
+        assertTrue(results.contains(new Coordinate(2,1)), "2,1 not contained");
+    }
+
+    @Test
+    void testEasy2()
+    {
+        //test that Easy sees immediate wins
+        ai.setPlayer(G.O);
+        ai.setSkillLevel(Difficulty.EASY);
+        int[][] gameBoard = new int[][]{
+                {G.X, G.BLANK, G.BLANK},
+                {G.BLANK, G.O, G.X},
+                {G.O, G.BLANK, G.X}};
+        board.setBoard(gameBoard);
+
+        for(int i = 0; i < 10; i++)
+        {
+            Coordinate move = ai.findMove(board);
+            assertEquals(new Coordinate(0,2), move, "Issue in iteration " + i + "\n" +
+                    "move found was " + move.getX() + "," + move.getY());
+        }
     }
 }
