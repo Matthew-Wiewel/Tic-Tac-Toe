@@ -1,5 +1,6 @@
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -75,7 +76,7 @@ public class TicTacToeGame extends Application
     private TextField winDrawLossDisplay;
 
     private Scene playScene; //used for playing the game of Tic Tac Toe
-    private BorderPane playBox; //used to hold the GUI in this scene
+    private VBox playBox; //used to hold the GUI in this scene
     private TextField mostRecentMoveDisplay;
     private GridPane board; //will hold the squares of the tic tac toe board
     private ImageView[][] boardImages; //will have clickable images for making moves
@@ -172,6 +173,7 @@ public class TicTacToeGame extends Application
                             priorGames.getItems().add("You won a game on a " + G.N + "x" + G.N + "\nboard as " +
                                     G.toString(player) + getDifficulty());
                             winDrawLossDisplay.setText(getWinDrawLossString());
+                            mostRecentMoveDisplay.setText(gameOverNotice);
                             setBoardDisable(true); //with the game being over, disable the board
                         }
                         else if(currentResult == G.DRAW) //drawn game
@@ -181,6 +183,7 @@ public class TicTacToeGame extends Application
                             whoWonDisplay.setText("The field is a draw!");
                             priorGames.getItems().add("You drew on game on a " + G.N + "x" + G.N + "\nboard as " + G.toString(player) + getDifficulty());
                             winDrawLossDisplay.setText(getWinDrawLossString());
+                            mostRecentMoveDisplay.setText(gameOverNotice);
                             setBoardDisable(true);
                         }
                         else //game is still going on
@@ -381,11 +384,12 @@ public class TicTacToeGame extends Application
         mostRecentMoveDisplay = new TextField(emptyTextField);
         mostRecentMoveDisplay.setDisable(true);
         mostRecentMoveDisplay.setStyle("-fx-opacity: 1.0");
+        final int mostRecentMoveDisplayWidth = 200;
+        mostRecentMoveDisplay.setMinWidth(mostRecentMoveDisplayWidth);
+        mostRecentMoveDisplay.setMaxWidth(mostRecentMoveDisplayWidth);
 
         //the board is created upon pressing the play button, not here, hence the minimal code
         board = new GridPane();
-
-        playBox = new BorderPane();
 
         backToHome = new Button("Return to Main Menu");
         whoWonDisplay = new TextField(emptyTextField);
@@ -418,12 +422,11 @@ public class TicTacToeGame extends Application
 
         //put the text field and button into an HBox
         bottomInfo = new HBox(20, backToHome, confirmExitGame, cancelExitGame, whoWonDisplay);
+        bottomInfo.setAlignment(Pos.CENTER);
 
-        //set the border pane
-        playBox.setTop(mostRecentMoveDisplay);
-        playBox.setCenter(board);
-        playBox.setBottom(bottomInfo);
-
+        //set the play box
+        playBox = new VBox(20, mostRecentMoveDisplay, board, bottomInfo);
+        playBox.setAlignment(Pos.CENTER);
         playScene = new Scene(playBox, 2000, 1000);
 
     }
