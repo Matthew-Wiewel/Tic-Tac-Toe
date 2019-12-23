@@ -102,6 +102,13 @@ public class TicTacToeGame extends Application
         }
     }
 
+    private String getWinDrawLossString()
+    {
+        return "Wins: " + numWon +
+                "\nDraws: " + numDrawn +
+                "\nLosses: " + numLost;
+    }
+
     //method to enable or disable all the squares of the board
     private void setBoardDisable(boolean enablement)
     {
@@ -162,8 +169,9 @@ public class TicTacToeGame extends Application
                             numWon++;
                             hasGameInProgress = false;
                             whoWonDisplay.setText("Congratulations! You win!");
-                            priorGames.getItems().add("You won a game on a " + G.N + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
-                            winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+                            priorGames.getItems().add("You won a game on a " + G.N + "x" + G.N + "\nboard as " +
+                                    G.toString(player) + getDifficulty());
+                            winDrawLossDisplay.setText(getWinDrawLossString());
                             setBoardDisable(true); //with the game being over, disable the board
                         }
                         else if(currentResult == G.DRAW) //drawn game
@@ -171,8 +179,8 @@ public class TicTacToeGame extends Application
                             numDrawn++;
                             hasGameInProgress = false;
                             whoWonDisplay.setText("The field is a draw!");
-                            priorGames.getItems().add("You drew on game on a " + G.N + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
-                            winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+                            priorGames.getItems().add("You drew on game on a " + G.N + "x" + G.N + "\nboard as " + G.toString(player) + getDifficulty());
+                            winDrawLossDisplay.setText(getWinDrawLossString());
                             setBoardDisable(true);
                         }
                         else //game is still going on
@@ -220,8 +228,8 @@ public class TicTacToeGame extends Application
             numLost++;
             hasGameInProgress = false;
             whoWonDisplay.setText("Sorry. You lost to a computer.");
-            priorGames.getItems().add("You lost a game on a " + G.N  + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
-            winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+            priorGames.getItems().add("You lost a game on a " + G.N  + "x" + G.N + "\nboard as " + G.toString(player) + getDifficulty());
+            winDrawLossDisplay.setText(getWinDrawLossString());
             setBoardDisable(true); //and with a game over, disable the board
             mostRecentMoveDisplay.setText(gameOverNotice);
         }
@@ -230,8 +238,8 @@ public class TicTacToeGame extends Application
             numDrawn++;
             hasGameInProgress = false;
             whoWonDisplay.setText("The field is a draw!");
-            priorGames.getItems().add("You drew a game on a " + G.N  + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
-            winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
+            priorGames.getItems().add("You drew a game on a " + G.N  + "x" + G.N + "\nboard as " + G.toString(player) + getDifficulty());
+            winDrawLossDisplay.setText(getWinDrawLossString());
             setBoardDisable(true);
             mostRecentMoveDisplay.setText(gameOverNotice);
         }
@@ -356,6 +364,8 @@ public class TicTacToeGame extends Application
 
         priorGames = new ListView<>(); //create variables to display results of previous games and current stats
         winDrawLossDisplay = new TextField(emptyTextField);
+        winDrawLossDisplay.setDisable(true);
+        winDrawLossDisplay.setStyle("-fx-opacity: 1.0");
         infoHolder = new VBox(20, priorGames, winDrawLossDisplay);
 
         //combine the two VBoxes into an HBox
