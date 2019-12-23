@@ -41,12 +41,12 @@ class AILogic
             }
             case MEDIUM:
             {
-                maxDepth = G.N; //medium will look N moves ahead
+                maxDepth = G.N - G.N/2; //medium will look half of N moves ahead
                 break;
             }
             case HARD:
             {
-                maxDepth = 2*G.N; //hard looks 2N ahead
+                maxDepth = G.N; //hard looks N ahead
                 break;
             }
             case EXPERT:
