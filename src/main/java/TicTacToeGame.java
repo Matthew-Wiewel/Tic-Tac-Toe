@@ -122,7 +122,8 @@ public class TicTacToeGame extends Application
         }
         else //need to create a new board
         {
-            board.getChildren().removeAll(board.getChildren()); //clear previos board
+            board.getChildren().removeAll(board.getChildren()); //clear previous board
+            board.setStyle("-fx-background-color: black; -fx-vgap: 1; -fx-hgap: 1; -fx-padding: 10");
             G.N = boardSize; //update board size
             boardImages = new ImageView[G.N][G.N];
 
