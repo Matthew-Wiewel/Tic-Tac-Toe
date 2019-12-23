@@ -35,6 +35,9 @@ public class TicTacToeGame extends Application
     final private String homeTitle = "Tic-Tac-Toe Menu";
     final private String playTitle = "Play Tic-Tac-Toe";
     final private String emptyTextField = "             ";
+    final private String playerMoveNotice = "It is your turn to play";
+    final private String aiMoveNotice = "The computer is moving";
+    final private String gameOverNotice = "The game is over";
 
     //pause constant
     final private int pauseTime = 3;
@@ -131,15 +134,14 @@ public class TicTacToeGame extends Application
 
                         //make the move visually
                         boardImages[row][column].setImage(player == G.X ? xTransition : oTransition);
-                        PauseTransition p = new PauseTransition(Duration.seconds(pauseTime));
-                        p.play();
+                        PauseTransition pause = new PauseTransition(Duration.seconds(pauseTime));
+                        pause.play();
                         boardImages[row][column].setImage(player == G.X ? xImage : oImage);
                         boardImages[row][column].setDisable(true);
-                        //TODO, make it not disabled visually though it's disabled in truth
 
 
                         //make the move in TTTBoard member
-                        int currentResult = gameBoard.setAndCheckWin(player, row, column); //TODO, modify this method
+                        int currentResult = gameBoard.setAndCheckWin(player, row, column);
                         if(currentResult == player) //win was found
                         {
                             numWon++;
@@ -185,12 +187,13 @@ public class TicTacToeGame extends Application
 
     private void doAIMove()
     {
+        mostRecentMoveDisplay.setText(aiMoveNotice);
         Coordinate aiMove = ai.findMove(gameBoard);
 
         //visually make move
-        PauseTransition p = new PauseTransition(Duration.seconds(pauseTime));
+        PauseTransition pause = new PauseTransition(Duration.seconds(pauseTime));
         boardImages[aiMove.getX()][aiMove.getY()].setImage(ai.getPlayer() == G.X ? xTransition : oTransition);
-        p.play();
+        pause.play();
         boardImages[aiMove.getX()][aiMove.getY()].setImage(ai.getPlayer() == G.X ? xImage : oImage);
         boardImages[aiMove.getX()][aiMove.getY()].setDisable(true); //ai claimed this square, so disable it
 
@@ -205,6 +208,7 @@ public class TicTacToeGame extends Application
             priorGames.getItems().add("You lost a game on a " + G.N  + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
             winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
             setBoardDisable(true); //and with a game over, disable the board
+            mostRecentMoveDisplay.setText(gameOverNotice);
         }
         else if(aiResult == G.DRAW) //draw result
         {
@@ -214,6 +218,11 @@ public class TicTacToeGame extends Application
             priorGames.getItems().add("You drew a game on a " + G.N  + "x" + G.N + " board as " + G.toString(player) + getDifficulty());
             winDrawLossDisplay.setText("Won: " + numWon + "\tDrawn: " + numDrawn + "\tLost: " + numLost);
             setBoardDisable(true);
+            mostRecentMoveDisplay.setText(gameOverNotice);
+        }
+        else //case where game continues, let human know it's their move
+        {
+            mostRecentMoveDisplay.setText(playerMoveNotice);
         }
     }
 
@@ -321,6 +330,8 @@ public class TicTacToeGame extends Application
             //and if AI is X, have them do first move
             if(ai.getPlayer() == G.X)
                 doAIMove();
+            else //otherwise let human know to move
+                mostRecentMoveDisplay.setText(playerMoveNotice);
         });
 
         selectionAndPlayHolder = new VBox(20, currentPlayerDisplay, currentDifficultyDisplay, currentBoardSizeDisplay, playButton);
@@ -341,7 +352,7 @@ public class TicTacToeGame extends Application
         //text field to show location of most recent move
         mostRecentMoveDisplay = new TextField(emptyTextField);
         mostRecentMoveDisplay.setDisable(true);
-        mostRecentMoveDisplay.setStyle("-fx-opaque: 1.0");
+        mostRecentMoveDisplay.setStyle("-fx-opacity: 1.0");
 
         //the board is created upon pressing the play button, not here, hence the minimal code
         board = new GridPane();
@@ -396,7 +407,6 @@ public class TicTacToeGame extends Application
     //main function to allow mvn exec:main and mvn compile to launch program with the given plugins
     public static void main(String[] args)
     {
-        //TODO: uncomment this line once you're ready to add the GUI.
         launch(args);
     }
 
