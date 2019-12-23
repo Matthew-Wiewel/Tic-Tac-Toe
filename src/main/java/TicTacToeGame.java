@@ -23,6 +23,7 @@ public class TicTacToeGame extends Application
     private AILogic ai;
     private TTTBoard gameBoard;
     private int player;
+    private int imageSizing;
 
     //Image constants
     final private Image blankImage = new Image("blank.png");
@@ -41,6 +42,9 @@ public class TicTacToeGame extends Application
 
     //pause constant
     final private int pauseTime = 3;
+    final private int standardBoardSizing = 250;
+    final private int largeBoardSizing = 200;
+    final private int hugeBoardSizing = 150;
 
     private Scene homeScene; //scene for selecting difficulty, playing, and seeing history
     private VBox homeSceneBox;
@@ -118,6 +122,7 @@ public class TicTacToeGame extends Application
         }
         else //need to create a new board
         {
+            board.getChildren().removeAll(board.getChildren()); //clear previos board
             G.N = boardSize; //update board size
             boardImages = new ImageView[G.N][G.N];
 
@@ -125,8 +130,11 @@ public class TicTacToeGame extends Application
             {
                 for(int j = 0; j < G.N; j++)
                 {
+                    //put image in and set sizing of this imageview at this size
                     boardImages[i][j] = new ImageView(blankImage);
-                    //boardImages[i][j].setImage(blankImage);
+                    boardImages[i][j].setPreserveRatio(true);
+                    boardImages[i][j].setFitHeight(imageSizing);
+                    boardImages[i][j].setFitWidth(imageSizing);
 
                     int row = i; //variables used so that they can be in lambda
                     int column = j;
@@ -251,14 +259,17 @@ public class TicTacToeGame extends Application
         size5x5 = new MenuItem("Huge (5x5)");
         size3x3.setOnAction(e->{
             boardSize = 3;
+            imageSizing = standardBoardSizing;
             currentBoardSizeDisplay.setText("3x3 Board");
         });
         size4x4.setOnAction(e->{
             boardSize = 4;
+            imageSizing = largeBoardSizing;
             currentBoardSizeDisplay.setText("4x4 Board");
         });
         size5x5.setOnAction(e->{
             boardSize = 5;
+            imageSizing = hugeBoardSizing;
             currentBoardSizeDisplay.setText("5x5 Board");
         });
         boardSizeOptions.getItems().addAll(size3x3, size4x4, size5x5);
@@ -361,6 +372,8 @@ public class TicTacToeGame extends Application
 
         backToHome = new Button("Return to Main Menu");
         whoWonDisplay = new TextField(emptyTextField);
+        whoWonDisplay.setDisable(true);
+        whoWonDisplay.setStyle("-fx-opacity: 1.0");
         cancelExitGame = new Button("No, Keep Playing");
         confirmExitGame = new Button("Yes, Leave Game");
         backToHome.setOnAction(e->{
@@ -423,6 +436,7 @@ public class TicTacToeGame extends Application
         hasGameInProgress = false;
         ai = new AILogic();
         player = G.X;
+        imageSizing = standardBoardSizing;
         this.primaryStage = primaryStage; //set equal so we can reference the primary stage outside of start4
 
         createScenes();
