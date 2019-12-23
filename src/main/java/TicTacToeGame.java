@@ -397,7 +397,7 @@ public class TicTacToeGame extends Application
     public static void main(String[] args)
     {
         //TODO: uncomment this line once you're ready to add the GUI.
-        //launch(args);
+        launch(args);
     }
 
     @Override
