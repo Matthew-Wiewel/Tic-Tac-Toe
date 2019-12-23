@@ -106,8 +106,8 @@ public class TicTacToeGame extends Application
     private String getWinDrawLossString()
     {
         return "Wins: " + numWon +
-                "\nDraws: " + numDrawn +
-                "\nLosses: " + numLost;
+                "    Draws: " + numDrawn +
+                "    Losses: " + numLost;
     }
 
     //method to enable or disable all the squares of the board
@@ -262,11 +262,11 @@ public class TicTacToeGame extends Application
         quit = new MenuItem("Quit");
         freshStart.setOnAction(e->{
             //clear everything related to prior games
-            winDrawLossDisplay.setText(emptyTextField);
             priorGames.getItems().clear();
             numWon = 0;
             numLost = 0;
             numDrawn = 0;
+            winDrawLossDisplay.setText(getWinDrawLossString());
         });
         quit.setOnAction(e->System.exit(0)); //quit buttons exits game
         options.getItems().addAll(freshStart, quit);
@@ -366,7 +366,7 @@ public class TicTacToeGame extends Application
         selectionAndPlayHolder = new VBox(20, currentPlayerDisplay, currentDifficultyDisplay, currentBoardSizeDisplay, playButton);
 
         priorGames = new ListView<>(); //create variables to display results of previous games and current stats
-        winDrawLossDisplay = new TextField(emptyTextField);
+        winDrawLossDisplay = new TextField(getWinDrawLossString());
         winDrawLossDisplay.setDisable(true);
         winDrawLossDisplay.setStyle("-fx-opacity: 1.0");
         infoHolder = new VBox(20, priorGames, winDrawLossDisplay);
