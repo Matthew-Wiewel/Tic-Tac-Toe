@@ -170,7 +170,7 @@ public class TicTacToeGame extends Application
                             numWon++;
                             hasGameInProgress = false;
                             whoWonDisplay.setText("Congratulations! You win!");
-                            priorGames.getItems().add("You won a game on a " + G.N + "x" + G.N + "\nboard as " +
+                            priorGames.getItems().add(0,"You won a game on a " + G.N + "x" + G.N + "\nboard as " +
                                     G.toString(player) + getDifficulty());
                             winDrawLossDisplay.setText(getWinDrawLossString());
                             mostRecentMoveDisplay.setText(gameOverNotice);
@@ -181,7 +181,7 @@ public class TicTacToeGame extends Application
                             numDrawn++;
                             hasGameInProgress = false;
                             whoWonDisplay.setText("The field is a draw!");
-                            priorGames.getItems().add("You drew on game on a " + G.N + "x" + G.N + "\nboard as " + G.toString(player) + getDifficulty());
+                            priorGames.getItems().add(0,"You drew on game on a " + G.N + "x" + G.N + "\nboard as " + G.toString(player) + getDifficulty());
                             winDrawLossDisplay.setText(getWinDrawLossString());
                             mostRecentMoveDisplay.setText(gameOverNotice);
                             setBoardDisable(true);
@@ -231,7 +231,7 @@ public class TicTacToeGame extends Application
             numLost++;
             hasGameInProgress = false;
             whoWonDisplay.setText("Sorry. You lost to a computer.");
-            priorGames.getItems().add("You lost a game on a " + G.N  + "x" + G.N + "\nboard as " + G.toString(player) + getDifficulty());
+            priorGames.getItems().add(0,"You lost a game on a " + G.N  + "x" + G.N + "\nboard as " + G.toString(player) + getDifficulty());
             winDrawLossDisplay.setText(getWinDrawLossString());
             setBoardDisable(true); //and with a game over, disable the board
             mostRecentMoveDisplay.setText(gameOverNotice);
@@ -241,7 +241,7 @@ public class TicTacToeGame extends Application
             numDrawn++;
             hasGameInProgress = false;
             whoWonDisplay.setText("The field is a draw!");
-            priorGames.getItems().add("You drew a game on a " + G.N  + "x" + G.N + "\nboard as " + G.toString(player) + getDifficulty());
+            priorGames.getItems().add(0,"You drew a game on a " + G.N  + "x" + G.N + "\nboard as " + G.toString(player) + getDifficulty());
             winDrawLossDisplay.setText(getWinDrawLossString());
             setBoardDisable(true);
             mostRecentMoveDisplay.setText(gameOverNotice);
@@ -375,7 +375,7 @@ public class TicTacToeGame extends Application
         bottomOfHomePane = new HBox(40, selectionAndPlayHolder, infoHolder);
 
         homeSceneBox = new VBox(50, topMenu, bottomOfHomePane);
-        homeScene = new Scene(homeSceneBox, 800, 800);
+        homeScene = new Scene(homeSceneBox, 800, 600);
     }
 
     private void createPlayScene()
