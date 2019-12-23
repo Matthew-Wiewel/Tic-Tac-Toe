@@ -114,16 +114,14 @@ class TestAILogic
     @Test
     void testExpert3()
     {
-        //TODO
         ai.setPlayer(G.O);
         ai.setSkillLevel(Difficulty.EXPERT);
         int[][] gameBoard = new int[][]{
                 {G.O, G.BLANK, G.BLANK},
                 {G.BLANK, G.X, G.BLANK},
-                {G.BLANK, G.BLANK, G.O}};
+                {G.X, G.BLANK, G.O}};
         board.setBoard(gameBoard);
-        ArrayList<Coordinate> expectedResults = new ArrayList<Coordinate>(Arrays.asList(new Coordinate(0, 2),
-                new Coordinate(2, 0), new Coordinate(2, 2)));
+        ArrayList<Coordinate> expectedResults = new ArrayList<Coordinate>(Arrays.asList(new Coordinate(0, 2)));
 
         //run the test multiple times to ensure it continuously gives results within the valid range
         for (int i = 0; i < 20; i++)
@@ -132,5 +130,31 @@ class TestAILogic
             assertTrue(expectedResults.contains(move), "Incorrect move of " + move.getX() + "," + move.getY() + " returned." +
                     "\nIssue in iteration " + i);
         }
+    }
+
+    @Test
+    void testMedium1()
+    {
+        ai.setPlayer(G.O);
+        ai.setSkillLevel(Difficulty.MEDIUM);
+        int[][] gameBoard = new int[][]{
+                {G.X, G.BLANK, G.BLANK},
+                {G.BLANK, G.BLANK, G.BLANK},
+                {G.BLANK, G.BLANK, G.BLANK}};
+        board.setBoard(gameBoard);
+        ArrayList<Coordinate> results = new ArrayList<>(); //list to hold what find move returns
+
+        //run tests a bunch of times to ensure odds of each possible move showing up at least once
+        for (int i = 0; i < 100; i++)
+        {
+            Coordinate move = ai.findMove(board);
+            if(!results.contains(move))
+                results.add(move);
+        }
+
+        //now test to see that some good and some bad choices are made
+        assertTrue(results.contains(new Coordinate(0,2)), "Bad move: Coordinate 0,2 not contained");
+        assertTrue(results.contains(new Coordinate(2,0)), "Bad move: 2,0 not contained");
+        assertTrue(results.contains(new Coordinate(1,1)), "Good move: 1,1 not contained");
     }
 }
