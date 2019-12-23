@@ -58,7 +58,7 @@ class TestAILogic
         assertEquals(3, ai.getSkillLevel(), "Hard is not 2*G.N=" + 2*G.N);
 
         ai.setSkillLevel(Difficulty.EXPERT);
-        assertEquals(G.N*G.N-1, ai.getSkillLevel(), "Expert is not G.N*G.N-1=" + G.N*G.N*-1);
+        assertEquals(G.N*G.N, ai.getSkillLevel(), "Expert is not G.N*G.N-1=" + G.N*G.N*-1);
     }
 
     @Test

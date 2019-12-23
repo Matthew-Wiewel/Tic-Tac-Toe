@@ -51,7 +51,7 @@ class AILogic
             }
             case EXPERT:
             {
-                maxDepth = G.N * G.N - 1; //expert considers all move until end of game
+                maxDepth = G.N * G.N; //expert considers all move until end of game
                 break;
             }
         }
