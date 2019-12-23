@@ -375,7 +375,7 @@ public class TicTacToeGame extends Application
         bottomOfHomePane = new HBox(40, selectionAndPlayHolder, infoHolder);
 
         homeSceneBox = new VBox(50, topMenu, bottomOfHomePane);
-        homeScene = new Scene(homeSceneBox, 2000, 1000);
+        homeScene = new Scene(homeSceneBox, 800, 800);
     }
 
     private void createPlayScene()
@@ -427,7 +427,7 @@ public class TicTacToeGame extends Application
         //set the play box
         playBox = new VBox(20, mostRecentMoveDisplay, board, bottomInfo);
         playBox.setAlignment(Pos.CENTER);
-        playScene = new Scene(playBox, 2000, 1000);
+        playScene = new Scene(playBox, 900, 900);
 
     }
 
