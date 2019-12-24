@@ -411,4 +411,26 @@ class TestTTTBoard
         Integer garbage = 5;
         assertFalse(test.equals(garbage), "Inequality with non-TTTBoard not working");
     }
+
+    @Test
+    void testEquals2()
+    {
+        //test to see two are the same even if their minMaxValues are different
+
+        TTTBoard other = new TTTBoard(test);
+        other.setMinMaxValue(500);
+        test.setMinMaxValue(400);
+
+        assertTrue(other.equals(test), "other does not equal test");
+        assertTrue(test.equals(other), "test does not equal other");
+    }
+    
+    @Test
+    void testHashCode()
+    {
+        int[][] board = new int[][]{{G.X, G.O, G.X},{G.BLANK, G.BLANK, G.X},{G.BLANK, G.O, G.BLANK}};
+        test.setBoard(board);
+
+        assertEquals(Arrays.deepHashCode(board), test.hashCode(), "TTTBoard hash code differs from its board's hash code");
+    }
 }

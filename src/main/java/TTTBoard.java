@@ -6,6 +6,7 @@ class TTTBoard
 {
     private int[][] board; //holds the tic-tac-toe board
     private ArrayList<Coordinate> openSpaces;
+    private int minMaxValue;
 
     //method to get which diagonal a coordinate is on, must take away private to test in TestBoard and uncomment the test
     private static int getDiagonal(int row, int col) //tested
@@ -139,6 +140,10 @@ class TTTBoard
             }
         }
     }
+    void setMinMaxValue(int newMinMaxValue)
+    { minMaxValue = newMinMaxValue; }
+    int getMinMaxValue()
+    { return  minMaxValue; }
     //returns a deep copy of the board
     int[][] getBoardDeepCopy() //tested
     {
@@ -265,7 +270,7 @@ class TTTBoard
     }
 
     @Override
-    public boolean equals(Object obj) //tested
+    public boolean equals(Object obj)
     {
         if(this == obj) //self-compare is true
             return true;
@@ -279,7 +284,12 @@ class TTTBoard
             return false;
     }
 
-
+    //override hashCode by using the board's hash code
+    @Override
+    public int hashCode()
+    {
+        return Arrays.deepHashCode(board);
+    }
 
 
 }
