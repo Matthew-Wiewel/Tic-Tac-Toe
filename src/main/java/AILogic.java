@@ -94,9 +94,9 @@ class AILogic
             //make move for AI to start the search and find its value
             TTTBoard tempBoard = new TTTBoard(gameBoard);
             int tempStateValue = tempBoard.setAndCheckWin(player, c.getX(), c.getY());
-            alpha = Integer.MIN_VALUE;
-            beta = Integer.MAX_VALUE;
-            int valueOfState = min(tempBoard, tempStateValue, 1);
+            int alpha = Integer.MIN_VALUE;
+            int beta = Integer.MAX_VALUE;
+            int valueOfState = min(tempBoard, tempStateValue, 1, alpha, beta);
 
             //create pair based on this coordinate and value and add it to our list
             Pair<Coordinate, Integer> tempPair = new Pair<>(c, valueOfState);
@@ -119,7 +119,7 @@ class AILogic
         return moveChoice;
     }
 
-    private int max(TTTBoard gameBoard, int stateStatus, int depthTraversed)
+    private int max(TTTBoard gameBoard, int stateStatus, int depthTraversed, int alpha, int beta)
     {
         //if we are in a terminal state, return its value
         if(isTerminalState(stateStatus, depthTraversed))
@@ -134,7 +134,7 @@ class AILogic
             TTTBoard tempBoard = new TTTBoard(gameBoard);
             int tempStateValue = tempBoard.setAndCheckWin(player, c.getX(), c.getY());
             //store value of this possible move into a temporary value
-            int temp = min(tempBoard, tempStateValue, depthTraversed + 1);
+            int temp = min(tempBoard, tempStateValue, depthTraversed + 1, alpha, beta);
 
             if(temp >= beta)
                 return temp;
@@ -147,7 +147,7 @@ class AILogic
         return maxValue;
     }
 
-    private int min(TTTBoard gameBoard, int stateStatus, int depthTraversed)
+    private int min(TTTBoard gameBoard, int stateStatus, int depthTraversed, int alpha, int beta)
     {
         //if we are in a terminal state, return its value
         if(isTerminalState(stateStatus, depthTraversed))
@@ -162,7 +162,7 @@ class AILogic
             TTTBoard tempBoard = new TTTBoard(gameBoard);
             int tempStateValue = tempBoard.setAndCheckWin(player == G.X ? G.O : G.X, c.getX(), c.getY());
             //store value of this possible move into a temporary value
-            int temp = max(tempBoard, tempStateValue, depthTraversed + 1);
+            int temp = max(tempBoard, tempStateValue, depthTraversed + 1, alpha, beta);
 
             //test if we've got a value low enough to just return without searching the whole area
             if(temp <= alpha)
